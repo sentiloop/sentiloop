@@ -475,3 +475,270 @@ button:focus-visible {
   background-position: 100% center;
   box-shadow: 0 12px 32px rgba(157, 252, 199, 0.16);
 }
+
+
+/* AI Feature Showcase */
+.ai-showcase {
+  background: linear-gradient(180deg, var(--ink) 0%, #060a0c 50%, var(--ink) 100%);
+}
+
+.ai-bg-aurora {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 40% at 30% 20%, rgba(157, 252, 199, 0.06), transparent 60%),
+    radial-gradient(ellipse 45% 50% at 75% 70%, rgba(133, 232, 255, 0.05), transparent 55%),
+    radial-gradient(ellipse 40% 35% at 55% 45%, rgba(169, 156, 255, 0.04), transparent 50%);
+  animation: ai-aurora-shift 18s ease-in-out infinite alternate;
+}
+
+.ai-bg-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.14;
+  background-image:
+    linear-gradient(rgba(157, 252, 199, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(157, 252, 199, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent 72%);
+}
+
+.ai-bg-orbs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ai-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: ai-orb-float 12s ease-in-out infinite alternate;
+}
+
+.ai-orb-1 {
+  top: 15%;
+  left: 10%;
+  width: 320px;
+  height: 320px;
+  background: rgba(157, 252, 199, 0.07);
+  animation-delay: 0s;
+}
+
+.ai-orb-2 {
+  top: 55%;
+  right: 8%;
+  width: 280px;
+  height: 280px;
+  background: rgba(133, 232, 255, 0.06);
+  animation-delay: -4s;
+}
+
+.ai-orb-3 {
+  bottom: 10%;
+  left: 35%;
+  width: 240px;
+  height: 240px;
+  background: rgba(169, 156, 255, 0.05);
+  animation-delay: -8s;
+}
+
+.ai-title-gradient {
+  background: linear-gradient(110deg, #9dfcc7 0%, #85e8ff 45%, #a99cff 80%, #9dfcc7 100%);
+  background-size: 200% auto;
+  background-clip: text;
+  color: transparent;
+  -webkit-background-clip: text;
+  animation: ai-gradient-flow 6s linear infinite;
+}
+
+/* Card structure */
+.ai-card {
+  position: relative;
+  border-radius: 1.5rem;
+  transition: transform 0.4s cubic-bezier(0.03, 0.98, 0.52, 0.99);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.ai-card-border {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    transparent 25%,
+    var(--glow-color) 50%,
+    transparent 75%
+  );
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  animation: ai-border-spin 4s linear infinite;
+}
+
+.ai-card:hover .ai-card-border {
+  opacity: 1;
+}
+
+.ai-card-glow {
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    600px circle at var(--light-x) var(--light-y),
+    color-mix(in srgb, var(--glow-color) 12%, transparent),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.ai-card:hover .ai-card-glow {
+  opacity: 1;
+}
+
+.ai-card-lighting {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  background: radial-gradient(
+    350px circle at var(--light-x) var(--light-y),
+    rgba(255, 255, 255, 0.06),
+    transparent 50%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.ai-card:hover .ai-card-lighting {
+  opacity: 1;
+}
+
+.ai-card-content {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: inherit;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.055) 0%,
+    rgba(255, 255, 255, 0.018) 100%
+  );
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.07),
+    0 25px 70px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
+  padding: 1.65rem;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.ai-card:hover .ai-card-content {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.1),
+    0 30px 80px rgba(0, 0, 0, 0.35),
+    0 0 40px color-mix(in srgb, var(--glow-color) 8%, transparent);
+}
+
+.ai-card-icon-well {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.85rem;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.ai-card:hover .ai-card-icon-well {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 0 28px color-mix(in srgb, var(--glow-color) 25%, transparent);
+}
+
+.ai-card-hover-indicator {
+  height: 2px;
+  margin-top: 1.1rem;
+  border-radius: 1px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease, width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ai-card:hover .ai-card-hover-indicator {
+  opacity: 1;
+  width: 3.5rem !important;
+}
+
+/* Keyframes */
+@keyframes ai-aurora-shift {
+  0% { transform: scale(1) translate3d(0, 0, 0); opacity: 0.8; }
+  100% { transform: scale(1.06) translate3d(1.5%, -1%, 0); opacity: 1; }
+}
+
+@keyframes ai-orb-float {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(12px, -18px, 0) scale(1.04); }
+  66% { transform: translate3d(-8px, 8px, 0) scale(0.97); }
+  100% { transform: translate3d(6px, -10px, 0) scale(1.02); }
+}
+
+@keyframes ai-gradient-flow {
+  to { background-position: 200% center; }
+}
+
+@keyframes ai-border-spin {
+  to { --border-angle: 360deg; }
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .ai-card-content {
+    padding: 1.35rem;
+  }
+
+  .ai-orb {
+    filter: blur(60px);
+  }
+
+  .ai-orb-1 { width: 200px; height: 200px; }
+  .ai-orb-2 { width: 180px; height: 180px; }
+  .ai-orb-3 { width: 160px; height: 160px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .ai-bg-aurora,
+  .ai-orb,
+  .ai-title-gradient,
+  .ai-card-border {
+    animation: none !important;
+  }
+
+  .ai-card {
+    transition: none !important;
+  }
+
+  .ai-card-glow,
+  .ai-card-lighting {
+    display: none;
+  }
+}

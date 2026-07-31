@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll";
+import { SessionProvider } from "@/components/providers/session-provider";
 import "./globals.css";
 
 const geist = Geist({
@@ -64,7 +65,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body className={`${geist.variable} ${geistMono.variable}`}>
-        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        <SessionProvider>
+          <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        </SessionProvider>
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 import { Footer } from "@/components/layout/footer";
 import { Navigation } from "@/components/layout/navigation";
 import { ScrollChoreography } from "@/components/motion/scroll-choreography";
+import { AIShowcase } from "@/components/sections/ai-showcase";
 import { CTA } from "@/components/sections/cta";
 import { Hero } from "@/components/sections/hero";
 import { Intelligence } from "@/components/sections/intelligence";
@@ -21,6 +22,7 @@ export default function Home() {
         <Platform />
         <Workflow />
         <Intelligence />
+        <AIShowcase />
         <Results />
         <CTA />
       </main>

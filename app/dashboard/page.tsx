@@ -22,6 +22,8 @@ import {
   Users,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
+import { auth } from "@/lib/auth";
+import { DashboardUserMenu } from "@/components/auth/dashboard-user-menu";
 
 export const metadata: Metadata = {
   title: "Workspace preview",
@@ -45,7 +47,17 @@ const activity = [
 
 const chartBars = [42, 51, 47, 62, 58, 72, 68, 83, 77, 91, 86, 96, 88, 94];
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const session = await auth();
+  const userName = session?.user?.name ?? "Explorer";
+  const userEmail = session?.user?.email ?? "";
+  const initials = userName
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2) || "SL";
+
   return (
     <main className="min-h-screen bg-[#05070b] text-[#edf4f7]">
       <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_70%_-15%,rgba(61,150,255,.10),transparent_32rem),radial-gradient(circle_at_18%_75%,rgba(132,99,255,.055),transparent_28rem)]" />
@@ -78,13 +90,13 @@ export default function DashboardPage() {
             <div className="flex items-center gap-2">
               <button type="button" className="hidden h-9 min-w-52 items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.025] px-3 text-left text-[10px] text-[#627281] sm:flex"><Search size={13} /><span className="flex-1">Search intelligence</span><Command size={11} /> K</button>
               <button type="button" aria-label="Notifications" className="relative grid size-9 place-items-center rounded-xl border border-white/[0.08] bg-white/[0.025] text-[#8b9aa7]"><Bell size={14} /><span className="absolute right-2 top-2 size-1.5 rounded-full bg-[#77e9ff]" /></button>
-              <div className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-[#4bbfe8] to-[#705de3] text-[10px] font-semibold">SL</div>
+              <DashboardUserMenu initials={initials} email={userEmail} name={userName} />
             </div>
           </header>
 
           <div className="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-              <div><div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.15em] text-[#6d7b87]"><span className="size-1.5 rounded-full bg-[#9dfcc7] shadow-[0_0_9px_#9dfcc7]" />Signal field stable</div><h1 className="mt-3 text-3xl font-medium tracking-[-0.055em] sm:text-4xl">Good morning, Explorer.</h1><p className="mt-2 max-w-xl text-sm leading-6 text-[#748391]">Your preview signal map found three meaningful shifts across customer conversations.</p></div>
+              <div><div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.15em] text-[#6d7b87]"><span className="size-1.5 rounded-full bg-[#9dfcc7] shadow-[0_0_9px_#9dfcc7]" />Signal field stable</div><h1 className="mt-3 text-3xl font-medium tracking-[-0.055em] sm:text-4xl">Good morning, {userName}.</h1><p className="mt-2 max-w-xl text-sm leading-6 text-[#748391]">Your preview signal map found three meaningful shifts across customer conversations.</p></div>
               <Link href="/login" className="inline-flex h-10 items-center justify-center gap-2 self-start rounded-xl border border-white/10 bg-white/[0.05] px-4 text-xs font-medium text-[#c8d6df] transition-colors hover:bg-white/[0.09]">Replay portal <ArrowRight size={14} /></Link>
             </div>
 
