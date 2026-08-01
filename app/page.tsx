@@ -4,6 +4,7 @@ import { ScrollChoreography } from "@/components/motion/scroll-choreography";
 import { AIShowcase } from "@/components/sections/ai-showcase";
 import { CTA } from "@/components/sections/cta";
 import { Hero } from "@/components/sections/hero";
+import { HolographicCards } from "@/components/sections/holographic-cards";
 import { Intelligence } from "@/components/sections/intelligence";
 import { Platform } from "@/components/sections/platform";
 import { Results } from "@/components/sections/results";
@@ -23,6 +24,7 @@ export default function Home() {
         <Workflow />
         <Intelligence />
         <AIShowcase />
+        <HolographicCards />
         <Results />
         <CTA />
       </main>

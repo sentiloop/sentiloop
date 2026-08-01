@@ -4,11 +4,14 @@
  * In production, replace with a real database (PostgreSQL, MongoDB, etc.).
  */
 
+export type UserRole = "admin" | "manager" | "sales" | "employee";
+
 export interface User {
   id: string;
   email: string;
   passwordHash: string | null;
   name: string | null;
+  role: UserRole;
   emailVerified: boolean;
   twoFactorEnabled: boolean;
   twoFactorSecret: string | null;

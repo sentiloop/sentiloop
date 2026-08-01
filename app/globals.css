@@ -742,3 +742,181 @@ button:focus-visible {
     display: none;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════
+   NEON / CYBERPUNK AESTHETIC
+   ═══════════════════════════════════════════════════ */
+
+/* Neon text utilities */
+.neon-text-cyan {
+  color: #62d9ff;
+  text-shadow: 0 0 8px rgba(98, 217, 255, 0.4), 0 0 30px rgba(98, 217, 255, 0.15);
+}
+
+.neon-text-violet {
+  color: #a99cff;
+  text-shadow: 0 0 8px rgba(169, 156, 255, 0.4), 0 0 30px rgba(169, 156, 255, 0.15);
+}
+
+.neon-text-mint {
+  color: #9dfcc7;
+  text-shadow: 0 0 8px rgba(157, 252, 199, 0.4), 0 0 30px rgba(157, 252, 199, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════
+   HOLOGRAPHIC DATA CARDS
+   ═══════════════════════════════════════════════════ */
+
+.holo-card {
+  --holo-accent: #62d9ff;
+  --holo-x: 50%;
+  --holo-y: 50%;
+  position: relative;
+  border-radius: 1.4rem;
+  transition: transform 0.4s cubic-bezier(0.03, 0.98, 0.52, 0.99);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.holo-shimmer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: radial-gradient(
+    400px circle at var(--holo-x) var(--holo-y),
+    color-mix(in srgb, var(--holo-accent) 8%, transparent),
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.holo-card:hover .holo-shimmer {
+  opacity: 1;
+}
+
+.holo-border {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    transparent 30%,
+    var(--holo-accent) 50%,
+    transparent 70%
+  );
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  animation: holo-border-spin 3s linear infinite;
+  pointer-events: none;
+}
+
+.holo-card:hover .holo-border {
+  opacity: 1;
+}
+
+.holo-scanline {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.holo-card:hover .holo-scanline {
+  opacity: 1;
+}
+
+.holo-scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 3px,
+    rgba(98, 217, 255, 0.03) 3px 4px
+  );
+  animation: holo-scan-move 4s linear infinite;
+}
+
+.holo-content {
+  position: relative;
+  z-index: 4;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: inherit;
+  background: linear-gradient(160deg, rgba(8, 18, 35, 0.88), rgba(4, 10, 22, 0.78));
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.06),
+    0 30px 80px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  padding: 1.5rem;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.holo-card:hover .holo-content {
+  border-color: color-mix(in srgb, var(--holo-accent) 25%, transparent);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.1),
+    0 35px 90px rgba(0, 0, 0, 0.4),
+    0 0 40px color-mix(in srgb, var(--holo-accent) 6%, transparent);
+}
+
+.holo-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.holo-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes holo-border-spin {
+  to { --border-angle: 360deg; }
+}
+
+@keyframes holo-scan-move {
+  to { transform: translateY(100%); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holo-border,
+  .holo-scanline::after,
+  .holo-status-dot {
+    animation: none !important;
+  }
+
+  .holo-card {
+    transition: none !important;
+  }
+
+  .holo-shimmer,
+  .holo-scanline {
+    display: none;
+  }
+}

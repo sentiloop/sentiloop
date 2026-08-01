@@ -10,12 +10,14 @@ declare module "next-auth" {
   interface User {
     twoFactorEnabled?: boolean;
     requiresTwoFactor?: boolean;
+    role?: string;
   }
   interface Session {
     user: {
       id: string;
       email: string;
       name: string | null;
+      role: string;
       twoFactorEnabled: boolean;
     };
   }
@@ -25,6 +27,7 @@ interface AuthToken {
   id: string;
   email?: string | null;
   name?: string | null;
+  role: string;
   twoFactorEnabled: boolean;
   requiresTwoFactor?: boolean;
   [key: string]: unknown;
@@ -74,6 +77,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: user.id,
           email: user.email,
           name: user.name,
+          role: user.role,
           twoFactorEnabled: user.twoFactorEnabled,
           requiresTwoFactor: user.twoFactorEnabled,
         };
@@ -93,6 +97,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             email,
             passwordHash: null,
             name: user.name ?? null,
+            role: "employee",
             emailVerified: true,
             twoFactorEnabled: false,
             twoFactorSecret: null,
@@ -111,6 +116,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         const dbUser = findUserByEmail(user.email ?? "");
         (token as AuthToken).id = dbUser?.id ?? user.id ?? "";
+        (token as AuthToken).role = dbUser?.role ?? (user as { role?: string }).role ?? "employee";
         (token as AuthToken).twoFactorEnabled = (user as { twoFactorEnabled?: boolean }).twoFactorEnabled ?? false;
         (token as AuthToken).requiresTwoFactor = (user as { requiresTwoFactor?: boolean }).requiresTwoFactor ?? false;
       }
@@ -118,6 +124,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
       session.user.id = (token as AuthToken).id;
+      session.user.role = (token as AuthToken).role;
       session.user.twoFactorEnabled = (token as AuthToken).twoFactorEnabled;
       return session;
     },

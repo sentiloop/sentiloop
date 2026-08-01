@@ -46,6 +46,7 @@ export async function register(formData: {
     email: email.toLowerCase(),
     passwordHash,
     name,
+    role: "employee",
     emailVerified: false,
     twoFactorEnabled: false,
     twoFactorSecret: null,
