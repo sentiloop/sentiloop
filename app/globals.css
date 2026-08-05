@@ -920,3 +920,45 @@ button:focus-visible {
     display: none;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════
+   SWIPER CUSTOM STYLES
+   ═══════════════════════════════════════════════════ */
+
+.feature-slider-swiper .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
+
+.testimonial-swiper .swiper-slide {
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.testimonial-swiper .swiper-slide:not(.swiper-slide-active) {
+  opacity: 0.5;
+  transform: scale(0.92);
+}
+
+.testimonial-swiper .swiper-slide-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.swiper-testimonial-pagination .swiper-pagination-bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(98, 217, 255, 0.25);
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.swiper-testimonial-pagination .swiper-pagination-bullet-active {
+  width: 24px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #62d9ff, #a99cff);
+}
+
+.partner-swiper .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
