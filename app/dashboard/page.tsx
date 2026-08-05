@@ -64,8 +64,9 @@ export default async function DashboardPage() {
       <div className="relative mx-auto grid min-h-screen max-w-[1600px] lg:grid-cols-[230px_1fr]">
         <aside className="hidden border-r border-white/[0.07] bg-[#070a0f]/80 px-4 py-5 lg:flex lg:flex-col" aria-label="Workspace navigation">
           <Logo href="/" className="px-2" />
-          <div className="mt-8 rounded-xl border border-[#6ecfff]/15 bg-[#5bc9ff]/[0.06] px-3 py-3">
-            <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.13em] text-[#8edfff]"><span className="size-1.5 rounded-full bg-[#77e9ff] shadow-[0_0_10px_#77e9ff]" />Preview workspace</div>
+          <div className="mt-8 overflow-hidden rounded-xl px-3 py-3 relative" style={{ background: "linear-gradient(135deg, rgba(255,107,107,0.08), rgba(255,217,61,0.08), rgba(107,255,107,0.08), rgba(107,212,255,0.08), rgba(169,107,255,0.08), rgba(255,107,205,0.08))" }}>
+            <div className="absolute inset-0 rounded-xl pointer-events-none" style={{ padding: "1px", background: "linear-gradient(90deg, #ff6b6b, #ffd93d, #6bff6b, #6bd4ff, #a96bff, #ff6bcd)", WebkitMask: "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+            <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.13em]"><span className="size-1.5 rounded-full" style={{ background: "linear-gradient(135deg, #ff6b6b, #ffd93d, #6bff6b, #6bd4ff, #a96bff)", boxShadow: "0 0 10px #a96bff" }} /><span style={{ background: "linear-gradient(90deg, #ff6b6b, #ffd93d, #6bff6b, #6bd4ff, #a96bff, #ff6bcd)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Preview workspace</span></div>
             <p className="mt-2 text-[10px] leading-4 text-[#667789]">Static demo data · no live session</p>
           </div>
           <nav className="mt-6 space-y-1" aria-label="Primary">
