@@ -12,11 +12,16 @@ import { Results } from "@/components/sections/results";
 import { SignalStrip } from "@/components/sections/signal-strip";
 import { TestimonialsCarousel } from "@/components/sections/testimonials-carousel";
 import { Workflow } from "@/components/sections/workflow";
+import { MouseTrail } from "@/components/effects/mouse-trail";
+import { MorphingBlobs } from "@/components/effects/morphing-blobs";
+import { TextScramble } from "@/components/effects/text-scramble";
+import { ScrollGallery } from "@/components/sections/scroll-gallery";
 
 export default function Home() {
   return (
     <>
       <div className="noise" aria-hidden="true" />
+      <MouseTrail />
       <ScrollChoreography />
       <Navigation />
       <main>
@@ -29,8 +34,19 @@ export default function Home() {
         <AIShowcase />
         <HolographicCards />
         <TestimonialsCarousel />
+        <div className="container-shell">
+          <TextScramble
+            text="Explore the data visually"
+            tag="p"
+            className="eyebrow mb-4 text-xs tracking-widest uppercase text-[#b8c0bd]"
+          />
+        </div>
+        <ScrollGallery />
         <Results />
-        <CTA />
+        <section className="relative">
+          <MorphingBlobs />
+          <CTA />
+        </section>
       </main>
       <Footer />
     </>
