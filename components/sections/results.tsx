@@ -18,7 +18,7 @@ export function Results() {
               “Sentiloop didn’t give us more data. It gave 300 people the same clear instinct about what customers needed next.”
             </blockquote>
           </MaskReveal>
-          <div className="mt-8"><p className="text-sm font-medium">Maya Chen</p><p className="mt-1 text-xs text-[#68716d]">Chief Experience Officer, Northstar</p></div>
+          <div className="mt-8"><p className="text-sm font-medium">Kaushal Tiwari</p><p className="mt-1 text-xs text-[#68716d]">Chief Experience Officer, India</p></div>
         </Reveal>
         <Stagger className="mt-16 grid overflow-hidden rounded-[26px] border border-white/[0.08] bg-white/[0.025] sm:grid-cols-3">
           {results.map(([value, label], index) => <StaggerItem preset="scale" key={value} className={`p-7 text-center md:p-9 ${index ? "border-t border-white/[0.07] sm:border-l sm:border-t-0" : ""}`}><p className="text-4xl font-medium tracking-[-0.06em] text-white md:text-5xl">{value}</p><p className="mt-3 text-xs text-[#737c78]">{label}</p></StaggerItem>)}
