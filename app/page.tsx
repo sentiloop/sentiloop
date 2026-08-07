@@ -2,6 +2,7 @@ import { Footer } from "@/components/layout/footer";
 import { Navigation } from "@/components/layout/navigation";
 import { ScrollChoreography } from "@/components/motion/scroll-choreography";
 import { AIShowcase } from "@/components/sections/ai-showcase";
+import { CinematicVision } from "@/components/sections/cinematic-vision";
 import { CTA } from "@/components/sections/cta";
 import { FeatureSlider } from "@/components/sections/feature-slider";
 import { Hero } from "@/components/sections/hero";
@@ -29,6 +30,7 @@ export default function Home() {
         <Hero />
         <SignalStrip />
         <ServicesOverview />
+        <CinematicVision />
         <FeatureSlider />
         <Platform />
         <Workflow />
