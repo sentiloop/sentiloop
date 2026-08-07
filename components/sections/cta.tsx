@@ -14,10 +14,10 @@ export function CTA() {
             <div className="relative z-10 mx-auto max-w-3xl">
               <span className="eyebrow justify-center">Your loop starts here</span>
               <MaskReveal delay={0.08} className="-mb-2 pb-2">
-                <h2 className="mt-5 text-[clamp(2.7rem,7vw,6rem)] font-medium leading-[0.96] tracking-[-0.07em]">Know what they feel.<br /><span className="mint-gradient">Build what matters.</span></h2>
+                <h2 className="mt-5 text-[clamp(2.7rem,7vw,6rem)] font-medium leading-[0.96] tracking-[-0.07em]">Ready to build<br /><span className="mint-gradient">what&apos;s next?</span></h2>
               </MaskReveal>
-              <p className="mx-auto mt-6 max-w-xl text-sm leading-6 text-[#89928e] md:text-base">Connect your first signal today. See the story inside your customer experience before your next meeting.</p>
-              <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row"><Link href="/login" className="primary-button">Open Sentiloop <ArrowRight size={16} /></Link><a href="#platform" className="secondary-button">Explore the platform</a></div>
+              <p className="mx-auto mt-6 max-w-xl text-sm leading-6 text-[#89928e] md:text-base">Let&apos;s transform your technology challenges into secure, intelligent and scalable digital solutions.</p>
+              <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row"><Link href="/login" className="primary-button">Start a Conversation <ArrowRight size={16} /></Link><Link href="/services" className="secondary-button">View Services</Link></div>
               <div className="mt-7 flex flex-wrap justify-center gap-x-6 gap-y-2">{["15-minute setup", "No engineering lift", "Cancel anytime"].map((item) => <span key={item} className="inline-flex items-center gap-1.5 text-[10px] text-[#68716d]"><Check size={11} className="text-[#9dfcc7]" />{item}</span>)}</div>
             </div>
           </div>

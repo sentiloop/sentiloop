@@ -9,6 +9,7 @@ import { HolographicCards } from "@/components/sections/holographic-cards";
 import { Intelligence } from "@/components/sections/intelligence";
 import { Platform } from "@/components/sections/platform";
 import { Results } from "@/components/sections/results";
+import { ServicesOverview } from "@/components/sections/services-overview";
 import { SignalStrip } from "@/components/sections/signal-strip";
 import { TestimonialsCarousel } from "@/components/sections/testimonials-carousel";
 import { Workflow } from "@/components/sections/workflow";
@@ -27,6 +28,7 @@ export default function Home() {
       <main>
         <Hero />
         <SignalStrip />
+        <ServicesOverview />
         <FeatureSlider />
         <Platform />
         <Workflow />

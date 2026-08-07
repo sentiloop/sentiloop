@@ -51,7 +51,7 @@ export function Hero() {
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#9dfcc7] opacity-60" />
               <span className="relative inline-flex size-1.5 rounded-full bg-[#9dfcc7] shadow-[0_0_10px_#9dfcc7]" />
             </span>
-            Neural intelligence, now sensing
+            Intelligent technology partner
           </motion.div>
 
           <h1 className="mt-6 max-w-[820px] text-[clamp(3.25rem,8.6vw,7.9rem)] font-medium leading-[0.87] tracking-[-0.079em] text-white">
@@ -62,7 +62,7 @@ export function Hero() {
                 animate={{ y: 0, rotate: 0, opacity: 1 }}
                 transition={{ duration: 1.05, delay: 0.12, ease }}
               >
-                Feel every
+                Secure. Intelligent.
               </motion.span>
             </span>
             <span className="block overflow-hidden pb-[0.14em]">
@@ -72,7 +72,7 @@ export function Hero() {
                 animate={{ y: 0, rotate: 0, opacity: 1 }}
                 transition={{ duration: 1.05, delay: 0.22, ease }}
               >
-                signal.
+                Engineered.
               </motion.span>
             </span>
           </h1>
@@ -84,7 +84,7 @@ export function Hero() {
             className="mt-4 grid max-w-2xl gap-7 md:grid-cols-[1fr_auto] md:items-end"
           >
             <p className="max-w-xl text-base leading-7 text-[#9ba5a0] md:text-lg md:leading-8">
-              Sentiloop transforms millions of customer moments into one living neural map—so your entire company can sense, understand, and move together.
+              Sentiloop delivers enterprise-grade cybersecurity, AI, software engineering, blockchain, SOC, and cloud solutions for organizations building the digital future.
             </p>
             <div className="hidden items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-[#626c67] md:flex">
               <MousePointer2 size={12} className="text-[#9dfcc7]" /> Move to explore
@@ -97,8 +97,8 @@ export function Hero() {
             transition={{ duration: 0.85, delay: 0.56, ease }}
             className="mt-8 flex flex-col gap-3 sm:flex-row"
           >
-            <Link href="/login" className="primary-button group min-w-40">
-              Start sensing
+            <Link href="/services" className="primary-button group min-w-40">
+              Explore Services
               <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
             <a href="#intelligence" className="secondary-button">
@@ -113,7 +113,7 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.74 }}
             className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[9px] uppercase tracking-[0.13em] text-[#5e6763]"
           >
-            <span>14.2M signals / day</span><span className="size-1 rounded-full bg-[#9dfcc7]/50" /><span>96.8% confidence</span><span className="size-1 rounded-full bg-[#9dfcc7]/50" /><span>SOC 2 ready</span>
+            <span>6 service pillars</span><span className="size-1 rounded-full bg-[#9dfcc7]/50" /><span>90+ capabilities</span><span className="size-1 rounded-full bg-[#9dfcc7]/50" /><span>Enterprise-grade</span>
           </motion.div>
         </div>
 

@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/ui/logo";
 
 const links = [
+  { label: "Services", href: "/services", index: "00" },
   { label: "Platform", href: "#platform", index: "01" },
   { label: "How it works", href: "#workflow", index: "02" },
   { label: "Intelligence", href: "#intelligence", index: "03" },
@@ -52,6 +53,7 @@ export function Navigation() {
 
       let currentSection = "";
       for (const link of links) {
+        if (link.href.startsWith("/")) continue;
         const section = document.querySelector<HTMLElement>(link.href);
         if (section && section.getBoundingClientRect().top <= window.innerHeight * 0.38) currentSection = link.href;
       }
@@ -104,16 +106,15 @@ export function Navigation() {
         <div className="absolute left-1/2 hidden -translate-x-1/2 items-center md:flex" onMouseLeave={() => setHoveredLink(null)}>
           {links.map((link) => {
             const highlighted = hoveredLink === link.href || (!hoveredLink && activeSection === link.href);
-            return (
-              <a
-                key={link.href}
-                href={link.href}
-                aria-current={activeSection === link.href ? "location" : undefined}
-                onMouseEnter={() => setHoveredLink(link.href)}
-                onFocus={() => setHoveredLink(link.href)}
-                onBlur={() => setHoveredLink(null)}
-                className={`group relative px-3.5 py-3 text-[0.74rem] font-medium transition-colors duration-300 ${highlighted ? "text-white" : "text-[#929b97] hover:text-white"}`}
-              >
+            const isRoute = link.href.startsWith("/");
+            const sharedProps = {
+              onMouseEnter: () => setHoveredLink(link.href),
+              onFocus: () => setHoveredLink(link.href),
+              onBlur: () => setHoveredLink(null),
+              className: `group relative px-3.5 py-3 text-[0.74rem] font-medium transition-colors duration-300 ${highlighted ? "text-white" : "text-[#929b97] hover:text-white"}`,
+            };
+            const content = (
+              <>
                 <span className="relative z-10">{link.label}</span>
                 {highlighted ? (
                   <motion.span
@@ -124,6 +125,15 @@ export function Navigation() {
                     <span className="absolute left-1/2 top-1/2 size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#c7ffda] shadow-[0_0_10px_#9dfcc7]" />
                   </motion.span>
                 ) : null}
+              </>
+            );
+            return isRoute ? (
+              <Link key={link.href} href={link.href} {...sharedProps}>
+                {content}
+              </Link>
+            ) : (
+              <a key={link.href} href={link.href} aria-current={activeSection === link.href ? "location" : undefined} {...sharedProps}>
+                {content}
               </a>
             );
           })}
@@ -177,16 +187,28 @@ export function Navigation() {
             <div className="relative flex flex-col">
               {links.map((link) => (
                 <motion.div key={link.href} variants={itemVariants}>
-                  <a
-                    href={link.href}
-                    onClick={closeMenu}
-                    aria-current={activeSection === link.href ? "location" : undefined}
-                    className="group flex items-center gap-4 border-b border-white/[0.07] px-2 py-4.5"
-                  >
-                    <span className="font-mono text-[9px] tracking-[0.14em] text-[#59625e]">{link.index}</span>
-                    <span className="flex-1 text-[1.18rem] font-medium tracking-[-0.035em] text-[#dfe5e2] transition-transform duration-300 group-hover:translate-x-1 group-hover:text-white">{link.label}</span>
-                    <span className="grid size-8 place-items-center rounded-full border border-white/[0.08] bg-white/[0.03] text-[#7c8581] transition-all duration-300 group-hover:border-[#9dfcc7]/25 group-hover:bg-[#9dfcc7]/[0.07] group-hover:text-[#bfffd6]"><ArrowRight size={13} /></span>
-                  </a>
+                  {link.href.startsWith("/") ? (
+                    <Link
+                      href={link.href}
+                      onClick={closeMenu}
+                      className="group flex items-center gap-4 border-b border-white/[0.07] px-2 py-4.5"
+                    >
+                      <span className="font-mono text-[9px] tracking-[0.14em] text-[#59625e]">{link.index}</span>
+                      <span className="flex-1 text-[1.18rem] font-medium tracking-[-0.035em] text-[#dfe5e2] transition-transform duration-300 group-hover:translate-x-1 group-hover:text-white">{link.label}</span>
+                      <span className="grid size-8 place-items-center rounded-full border border-white/[0.08] bg-white/[0.03] text-[#7c8581] transition-all duration-300 group-hover:border-[#9dfcc7]/25 group-hover:bg-[#9dfcc7]/[0.07] group-hover:text-[#bfffd6]"><ArrowRight size={13} /></span>
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      onClick={closeMenu}
+                      aria-current={activeSection === link.href ? "location" : undefined}
+                      className="group flex items-center gap-4 border-b border-white/[0.07] px-2 py-4.5"
+                    >
+                      <span className="font-mono text-[9px] tracking-[0.14em] text-[#59625e]">{link.index}</span>
+                      <span className="flex-1 text-[1.18rem] font-medium tracking-[-0.035em] text-[#dfe5e2] transition-transform duration-300 group-hover:translate-x-1 group-hover:text-white">{link.label}</span>
+                      <span className="grid size-8 place-items-center rounded-full border border-white/[0.08] bg-white/[0.03] text-[#7c8581] transition-all duration-300 group-hover:border-[#9dfcc7]/25 group-hover:bg-[#9dfcc7]/[0.07] group-hover:text-[#bfffd6]"><ArrowRight size={13} /></span>
+                    </a>
+                  )}
                 </motion.div>
               ))}
 
