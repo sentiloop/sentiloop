@@ -993,3 +993,23 @@ button:focus-visible {
 }
 
 
+
+
+/* ═══════════════════════════════════════════════════
+   LIVE DEMO FLOAT
+   ═══════════════════════════════════════════════════ */
+
+.live-demo-float {
+  animation: live-demo-float 4s ease-in-out infinite;
+}
+
+@keyframes live-demo-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-demo-float {
+    animation: none !important;
+  }
+}
