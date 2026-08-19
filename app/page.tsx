@@ -6,6 +6,7 @@ import { CounterStats } from "@/components/sections/counter-stats";
 import { CTA } from "@/components/sections/cta";
 import { FeatureSlider } from "@/components/sections/feature-slider";
 import { Hero } from "@/components/sections/hero";
+import { ARVRMotion } from "@/components/sections/ar-vr-motion";
 import { HolographicCards } from "@/components/sections/holographic-cards";
 import { Intelligence } from "@/components/sections/intelligence";
 import { LiveDemo } from "@/components/sections/live-demo";
@@ -38,6 +39,7 @@ export default function Home() {
         <Workflow />
         <Intelligence />
         <AIShowcase />
+        <ARVRMotion />
         <HolographicCards />
         <TestimonialsCarousel />
         <PricingSection />
