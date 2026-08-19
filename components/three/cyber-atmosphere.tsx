@@ -1,11 +1,7 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import {
-  AdaptiveDpr,
-  PerformanceMonitor,
-  Sparkles,
-} from "@react-three/drei";
+import { AdaptiveDpr, PerformanceMonitor, Sparkles } from "@react-three/drei";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { useReducedMotion } from "framer-motion";
 import { useCallback, useMemo, useRef, useState } from "react";
@@ -19,7 +15,6 @@ import {
   type Points,
   type PointLight,
 } from "three";
-import HoloDisplay from "@/components/three/holo-display";
 
 /* ─── Seeded Random ─── */
 function seededRandom(seedValue: number) {
@@ -31,11 +26,11 @@ function seededRandom(seedValue: number) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   NEON RAIN PARTICLES
+   NEON RAIN — reduced from 600 to 200 particles
    ═══════════════════════════════════════════════════════ */
 function NeonRain({ reducedMotion }: { reducedMotion: boolean }) {
   const rainRef = useRef<Points>(null);
-  const count = 600;
+  const count = 200;
 
   const { positions, velocities } = useMemo(() => {
     const random = seededRandom(2077);
@@ -43,10 +38,10 @@ function NeonRain({ reducedMotion }: { reducedMotion: boolean }) {
     const vel = new Float32Array(count);
 
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (random() - 0.5) * 12;
-      pos[i * 3 + 1] = random() * 10 - 2;
-      pos[i * 3 + 2] = (random() - 0.5) * 8 - 2;
-      vel[i] = 2 + random() * 4;
+      pos[i * 3] = (random() - 0.5) * 10;
+      pos[i * 3 + 1] = random() * 8 - 2;
+      pos[i * 3 + 2] = (random() - 0.5) * 6 - 2;
+      vel[i] = 2.5 + random() * 3;
     }
     return { positions: pos, velocities: vel };
   }, []);
@@ -57,7 +52,7 @@ function NeonRain({ reducedMotion }: { reducedMotion: boolean }) {
     for (let i = 0; i < count; i++) {
       let y = posAttr.getY(i);
       y -= velocities[i] * delta;
-      if (y < -3) y = 8 + Math.random() * 2;
+      if (y < -3) y = 7;
       posAttr.setY(i, y);
     }
     posAttr.needsUpdate = true;
@@ -69,10 +64,10 @@ function NeonRain({ reducedMotion }: { reducedMotion: boolean }) {
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.015}
+        size={0.018}
         color="#85e8ff"
         transparent
-        opacity={0.5}
+        opacity={0.45}
         blending={AdditiveBlending}
         depthWrite={false}
         sizeAttenuation
@@ -82,85 +77,33 @@ function NeonRain({ reducedMotion }: { reducedMotion: boolean }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   VOLUMETRIC FOG PLANES
+   NEON BUILDINGS — reduced from 20 to 10 buildings
    ═══════════════════════════════════════════════════════ */
-function VolumetricFog({ reducedMotion }: { reducedMotion: boolean }) {
-  const fogRef = useRef<Group>(null);
-
-  useFrame((state) => {
-    if (!fogRef.current || reducedMotion) return;
-    const time = state.clock.elapsedTime;
-    fogRef.current.children.forEach((child, i) => {
-      const mesh = child as Mesh;
-      mesh.position.x = Math.sin(time * 0.1 + i * 1.5) * 0.3;
-      const mat = mesh.material as { opacity?: number };
-      if (mat.opacity !== undefined) {
-        mat.opacity = 0.025 + Math.sin(time * 0.3 + i * 0.8) * 0.01;
-      }
-    });
-  });
-
-  return (
-    <group ref={fogRef}>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <mesh key={i} position={[0, -1 + i * 0.8, -3 - i * 0.5]} rotation={[-0.1, 0, 0]}>
-          <planeGeometry args={[14, 3]} />
-          <meshBasicMaterial
-            color={i % 2 === 0 ? "#9dfcc7" : "#9f91ff"}
-            transparent
-            opacity={0.025}
-            blending={AdditiveBlending}
-            depthWrite={false}
-            side={DoubleSide}
-          />
-        </mesh>
-      ))}
-    </group>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   NEON BUILDING SILHOUETTES
-   ═══════════════════════════════════════════════════════ */
-function CyberpunkBuildings({ reducedMotion }: { reducedMotion: boolean }) {
-  const groupRef = useRef<Group>(null);
-
+function CyberpunkBuildings() {
   const buildings = useMemo(() => {
     const random = seededRandom(8080);
-    return Array.from({ length: 20 }).map((_, i) => {
-      const width = 0.3 + random() * 0.7;
-      const height = 1.5 + random() * 4;
-      const depth = 0.3 + random() * 0.5;
-      const x = (i - 10) * 1.1 + (random() - 0.5) * 0.4;
-      const z = -4 - random() * 4;
+    return Array.from({ length: 10 }).map((_, i) => {
+      const width = 0.4 + random() * 0.8;
+      const height = 2 + random() * 4;
+      const depth = 0.3 + random() * 0.4;
+      const x = (i - 5) * 1.8 + (random() - 0.5) * 0.5;
+      const z = -5 - random() * 3;
       const color = ["#9dfcc7", "#9f91ff", "#85e8ff", "#ff6b9d"][Math.floor(random() * 4)];
       return { width, height, depth, x, z, color };
     });
   }, []);
 
-  useFrame((state) => {
-    if (!groupRef.current || reducedMotion) return;
-    const time = state.clock.elapsedTime;
-    groupRef.current.children.forEach((child, i) => {
-      const mesh = child as Mesh;
-      const mat = mesh.material as { emissiveIntensity?: number };
-      if (mat.emissiveIntensity !== undefined) {
-        mat.emissiveIntensity = 0.3 + Math.sin(time * 0.5 + i * 0.7) * 0.15;
-      }
-    });
-  });
-
   return (
-    <group ref={groupRef} position={[0, -1.5, 0]}>
+    <group position={[0, -1.5, 0]}>
       {buildings.map((b, i) => (
         <mesh key={i} position={[b.x, b.height / 2, b.z]}>
           <boxGeometry args={[b.width, b.height, b.depth]} />
           <meshStandardMaterial
             color="#050608"
             emissive={b.color}
-            emissiveIntensity={0.3}
-            roughness={0.8}
-            metalness={0.4}
+            emissiveIntensity={0.25}
+            roughness={0.85}
+            metalness={0.3}
           />
         </mesh>
       ))}
@@ -169,18 +112,18 @@ function CyberpunkBuildings({ reducedMotion }: { reducedMotion: boolean }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   NEON LIGHT STRIPS (building edge lights)
+   NEON STRIPS — reduced from 30 to 14
    ═══════════════════════════════════════════════════════ */
 function NeonStrips({ reducedMotion }: { reducedMotion: boolean }) {
   const groupRef = useRef<Group>(null);
 
   const strips = useMemo(() => {
     const random = seededRandom(4040);
-    return Array.from({ length: 30 }).map(() => {
-      const x = (random() - 0.5) * 12;
-      const y = random() * 5 - 1;
-      const z = -3 - random() * 5;
-      const length = 0.5 + random() * 2;
+    return Array.from({ length: 14 }).map(() => {
+      const x = (random() - 0.5) * 10;
+      const y = random() * 4 - 0.5;
+      const z = -3 - random() * 4;
+      const length = 0.8 + random() * 1.5;
       const vertical = random() > 0.5;
       const color = ["#9dfcc7", "#9f91ff", "#85e8ff", "#ff6b9d"][Math.floor(random() * 4)];
       return { x, y, z, length, vertical, color };
@@ -190,13 +133,15 @@ function NeonStrips({ reducedMotion }: { reducedMotion: boolean }) {
   useFrame((state) => {
     if (!groupRef.current || reducedMotion) return;
     const time = state.clock.elapsedTime;
-    groupRef.current.children.forEach((child, i) => {
-      const mesh = child as Mesh;
+    // Only update every other child to halve the per-frame work
+    const startIdx = Math.floor(time * 2) % 2;
+    for (let i = startIdx; i < groupRef.current.children.length; i += 2) {
+      const mesh = groupRef.current.children[i] as Mesh;
       const mat = mesh.material as { opacity?: number };
       if (mat.opacity !== undefined) {
-        mat.opacity = 0.5 + Math.sin(time * (1 + i * 0.1) + i) * 0.3;
+        mat.opacity = 0.5 + Math.sin(time * 1.2 + i) * 0.25;
       }
-    });
+    }
   });
 
   return (
@@ -207,11 +152,11 @@ function NeonStrips({ reducedMotion }: { reducedMotion: boolean }) {
           position={[s.x, s.y, s.z]}
           rotation={s.vertical ? [0, 0, Math.PI / 2] : [0, 0, 0]}
         >
-          <planeGeometry args={[s.length, 0.02]} />
+          <planeGeometry args={[s.length, 0.025]} />
           <meshBasicMaterial
             color={s.color}
             transparent
-            opacity={0.6}
+            opacity={0.55}
             blending={AdditiveBlending}
             depthWrite={false}
             side={DoubleSide}
@@ -223,47 +168,16 @@ function NeonStrips({ reducedMotion }: { reducedMotion: boolean }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   WET GROUND REFLECTIONS
-   ═══════════════════════════════════════════════════════ */
-function WetGround({ reducedMotion }: { reducedMotion: boolean }) {
-  const meshRef = useRef<Mesh>(null);
-
-  useFrame((state) => {
-    if (!meshRef.current || reducedMotion) return;
-    const mat = meshRef.current.material as { opacity?: number };
-    if (mat.opacity !== undefined) {
-      mat.opacity = 0.12 + Math.sin(state.clock.elapsedTime * 0.4) * 0.03;
-    }
-  });
-
-  return (
-    <mesh ref={meshRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.8, -2]}>
-      <planeGeometry args={[16, 10]} />
-      <meshStandardMaterial
-        color="#0a0f0d"
-        roughness={0.05}
-        metalness={0.95}
-        emissive="#9dfcc7"
-        emissiveIntensity={0.05}
-        transparent
-        opacity={0.14}
-      />
-    </mesh>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   FLOATING NEON SIGNS
+   NEON SIGNS — reduced to 3 signs, no per-scanline mesh
    ═══════════════════════════════════════════════════════ */
 function NeonSigns({ reducedMotion }: { reducedMotion: boolean }) {
   const groupRef = useRef<Group>(null);
 
   const signs = useMemo(
     () => [
-      { pos: [-3.5, 2.2, -4] as [number, number, number], color: "#ff6b9d", w: 1.2, h: 0.4 },
-      { pos: [4.2, 3.1, -5] as [number, number, number], color: "#9dfcc7", w: 1.5, h: 0.35 },
-      { pos: [-1.8, 3.8, -6] as [number, number, number], color: "#85e8ff", w: 0.9, h: 0.5 },
-      { pos: [2.5, 1.8, -3.5] as [number, number, number], color: "#9f91ff", w: 1.1, h: 0.3 },
+      { pos: [-3.5, 2.2, -4.5] as [number, number, number], color: "#ff6b9d", w: 1.2, h: 0.4 },
+      { pos: [4.2, 3.1, -5.5] as [number, number, number], color: "#9dfcc7", w: 1.4, h: 0.35 },
+      { pos: [2.5, 1.8, -3.8] as [number, number, number], color: "#9f91ff", w: 1.0, h: 0.3 },
     ],
     []
   );
@@ -273,14 +187,13 @@ function NeonSigns({ reducedMotion }: { reducedMotion: boolean }) {
     const time = state.clock.elapsedTime;
     groupRef.current.children.forEach((child, i) => {
       const group = child as Group;
-      group.position.y = signs[i].pos[1] + Math.sin(time * 0.3 + i * 1.2) * 0.05;
-      // Flicker effect
-      const innerMesh = group.children[0] as Mesh;
-      if (innerMesh) {
-        const mat = innerMesh.material as { opacity?: number };
+      group.position.y = signs[i].pos[1] + Math.sin(time * 0.3 + i) * 0.04;
+      const mesh = group.children[0] as Mesh;
+      if (mesh) {
+        const mat = mesh.material as { opacity?: number };
         if (mat.opacity !== undefined) {
-          const flicker = Math.sin(time * 8 + i * 3) > 0.92 ? 0.3 : 1;
-          mat.opacity = 0.7 * flicker;
+          const flicker = Math.sin(time * 6 + i * 3) > 0.94 ? 0.35 : 1;
+          mat.opacity = 0.65 * flicker;
         }
       }
     });
@@ -290,43 +203,29 @@ function NeonSigns({ reducedMotion }: { reducedMotion: boolean }) {
     <group ref={groupRef}>
       {signs.map((sign, i) => (
         <group key={i} position={sign.pos}>
-          {/* Sign face */}
           <mesh>
             <planeGeometry args={[sign.w, sign.h]} />
             <meshBasicMaterial
               color={sign.color}
               transparent
-              opacity={0.7}
+              opacity={0.65}
               blending={AdditiveBlending}
               depthWrite={false}
               side={FrontSide}
             />
           </mesh>
-          {/* Sign glow halo */}
+          {/* Single glow halo instead of multiple scanlines */}
           <mesh position={[0, 0, -0.01]}>
-            <planeGeometry args={[sign.w + 0.4, sign.h + 0.3]} />
+            <planeGeometry args={[sign.w + 0.3, sign.h + 0.2]} />
             <meshBasicMaterial
               color={sign.color}
               transparent
-              opacity={0.08}
+              opacity={0.06}
               blending={AdditiveBlending}
               depthWrite={false}
               side={FrontSide}
             />
           </mesh>
-          {/* Horizontal scan line effect */}
-          {Array.from({ length: 3 }).map((_, j) => (
-            <mesh key={j} position={[0, -sign.h / 2 + (j + 1) * (sign.h / 4), 0.001]}>
-              <planeGeometry args={[sign.w * 0.9, 0.005]} />
-              <meshBasicMaterial
-                color="#ffffff"
-                transparent
-                opacity={0.15}
-                blending={AdditiveBlending}
-                depthWrite={false}
-              />
-            </mesh>
-          ))}
         </group>
       ))}
     </group>
@@ -334,64 +233,44 @@ function NeonSigns({ reducedMotion }: { reducedMotion: boolean }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   GLOWING ORB STREET LIGHTS
+   WET GROUND — single plane
    ═══════════════════════════════════════════════════════ */
-function StreetLights({ reducedMotion }: { reducedMotion: boolean }) {
-  const lightsRef = useRef<Group>(null);
+function WetGround() {
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.8, -3]}>
+      <planeGeometry args={[14, 8]} />
+      <meshStandardMaterial
+        color="#080a0c"
+        roughness={0.08}
+        metalness={0.92}
+        emissive="#9dfcc7"
+        emissiveIntensity={0.03}
+      />
+    </mesh>
+  );
+}
 
+/* ═══════════════════════════════════════════════════════
+   STREET LIGHTS — reduced from 8 to 4
+   ═══════════════════════════════════════════════════════ */
+function StreetLights() {
   const lights = useMemo(() => {
     const random = seededRandom(6060);
-    return Array.from({ length: 8 }).map((_, i) => ({
-      pos: [(i - 4) * 2.2 + (random() - 0.5), -0.5, -2 - random() * 3] as [number, number, number],
+    return Array.from({ length: 4 }).map((_, i) => ({
+      pos: [(i - 2) * 3.5 + (random() - 0.5), -0.6, -2.5 - random() * 2] as [number, number, number],
       color: i % 2 === 0 ? "#9dfcc7" : "#9f91ff",
-      intensity: 0.4 + random() * 0.3,
     }));
   }, []);
 
-  useFrame((state) => {
-    if (!lightsRef.current || reducedMotion) return;
-    const time = state.clock.elapsedTime;
-    lightsRef.current.children.forEach((child, i) => {
-      const mesh = child.children[0] as Mesh;
-      if (mesh) {
-        const scale = 1 + Math.sin(time * 1.5 + i * 0.9) * 0.15;
-        mesh.scale.setScalar(scale);
-      }
-    });
-  });
-
   return (
-    <group ref={lightsRef}>
+    <group>
       {lights.map((light, i) => (
         <group key={i} position={light.pos}>
           <mesh>
-            <sphereGeometry args={[0.06, 12, 12]} />
-            <meshBasicMaterial
-              color={light.color}
-              transparent
-              opacity={0.9}
-              blending={AdditiveBlending}
-            />
+            <sphereGeometry args={[0.05, 8, 8]} />
+            <meshBasicMaterial color={light.color} />
           </mesh>
-          {/* Point light for bloom pickup */}
-          <pointLight
-            color={light.color}
-            intensity={light.intensity}
-            distance={3}
-            decay={2}
-          />
-          {/* Light cone below */}
-          <mesh position={[0, -0.4, 0]} rotation={[0, 0, 0]}>
-            <coneGeometry args={[0.3, 0.8, 12, 1, true]} />
-            <meshBasicMaterial
-              color={light.color}
-              transparent
-              opacity={0.04}
-              blending={AdditiveBlending}
-              depthWrite={false}
-              side={DoubleSide}
-            />
-          </mesh>
+          <pointLight color={light.color} intensity={0.4} distance={3} decay={2} />
         </group>
       ))}
     </group>
@@ -399,51 +278,85 @@ function StreetLights({ reducedMotion }: { reducedMotion: boolean }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   INTERACTIVE CURSOR GLOW
+   HOLOGRAPHIC BILLBOARD — simplified inline
    ═══════════════════════════════════════════════════════ */
-function CursorGlow({ reducedMotion }: { reducedMotion: boolean }) {
-  const lightRef = useRef<PointLight>(null);
-  const meshRef = useRef<Mesh>(null);
-  const target = useMemo(() => new Vector3(), []);
+function HoloBillboard({ reducedMotion }: { reducedMotion: boolean }) {
+  const scanRef = useRef<Mesh>(null);
 
-  useFrame((state, delta) => {
-    if (reducedMotion) return;
-    target.set(state.pointer.x * 4, state.pointer.y * 2.5, 1);
-    if (lightRef.current) {
-      lightRef.current.position.lerp(target, delta * 4);
-    }
-    if (meshRef.current) {
-      meshRef.current.position.lerp(target, delta * 4);
-      meshRef.current.scale.setScalar(0.8 + Math.sin(state.clock.elapsedTime * 3) * 0.1);
-    }
+  useFrame((state) => {
+    if (!scanRef.current || reducedMotion) return;
+    const y = ((state.clock.elapsedTime * 0.35) % 1) * 2.0 - 1.0;
+    scanRef.current.position.y = y;
   });
 
   return (
-    <>
-      <pointLight
-        ref={lightRef}
-        position={[0, 0, 1]}
-        color="#9dfcc7"
-        intensity={2}
-        distance={5}
-        decay={2}
-      />
-      <mesh ref={meshRef} position={[0, 0, 1]}>
-        <sphereGeometry args={[0.08, 12, 12]} />
-        <meshBasicMaterial
-          color="#9dfcc7"
-          transparent
-          opacity={0.3}
-          blending={AdditiveBlending}
-          depthWrite={false}
+    <group position={[0, 1.2, -4]} scale={1.2}>
+      {/* Frame */}
+      <mesh>
+        <boxGeometry args={[3.2, 1.9, 0.04]} />
+        <meshStandardMaterial
+          color="#080a0c"
+          roughness={0.2}
+          metalness={0.9}
+          emissive="#9dfcc7"
+          emissiveIntensity={0.04}
         />
       </mesh>
-    </>
+      {/* Border glow */}
+      <mesh position={[0, 0.95, 0.03]}>
+        <planeGeometry args={[3.2, 0.015]} />
+        <meshBasicMaterial color="#9dfcc7" transparent opacity={0.7} blending={AdditiveBlending} />
+      </mesh>
+      <mesh position={[0, -0.95, 0.03]}>
+        <planeGeometry args={[3.2, 0.015]} />
+        <meshBasicMaterial color="#9dfcc7" transparent opacity={0.7} blending={AdditiveBlending} />
+      </mesh>
+      {/* Screen */}
+      <mesh position={[0, 0, 0.03]}>
+        <planeGeometry args={[3.0, 1.7]} />
+        <meshBasicMaterial color="#0a1a15" transparent opacity={0.9} />
+      </mesh>
+      {/* Data rows (5 instead of 8) */}
+      {Array.from({ length: 5 }).map((_, i) => (
+        <mesh key={i} position={[-0.8 + i * 0.4, 0.3, 0.04]}>
+          <planeGeometry args={[0.25 + (i % 3) * 0.1, 0.04]} />
+          <meshBasicMaterial
+            color={["#9dfcc7", "#85e8ff", "#9f91ff"][i % 3]}
+            transparent
+            opacity={0.4}
+            blending={AdditiveBlending}
+          />
+        </mesh>
+      ))}
+      {/* Scan line */}
+      <mesh ref={scanRef} position={[0, 0, 0.05]}>
+        <planeGeometry args={[3.0, 0.012]} />
+        <meshBasicMaterial color="#9dfcc7" transparent opacity={0.5} blending={AdditiveBlending} depthWrite={false} />
+      </mesh>
+    </group>
   );
 }
 
 /* ═══════════════════════════════════════════════════════
-   SCENE CAMERA RIG
+   CURSOR GLOW — lightweight
+   ═══════════════════════════════════════════════════════ */
+function CursorGlow({ reducedMotion }: { reducedMotion: boolean }) {
+  const lightRef = useRef<PointLight>(null);
+  const target = useMemo(() => new Vector3(), []);
+
+  useFrame((state, delta) => {
+    if (reducedMotion || !lightRef.current) return;
+    target.set(state.pointer.x * 3.5, state.pointer.y * 2, 2);
+    lightRef.current.position.lerp(target, delta * 3);
+  });
+
+  return (
+    <pointLight ref={lightRef} position={[0, 0, 2]} color="#9dfcc7" intensity={1.5} distance={4} decay={2} />
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   CAMERA RIG
    ═══════════════════════════════════════════════════════ */
 function CyberCameraRig({ reducedMotion }: { reducedMotion: boolean }) {
   const { camera } = useThree();
@@ -453,48 +366,19 @@ function CyberCameraRig({ reducedMotion }: { reducedMotion: boolean }) {
     if (reducedMotion) return;
     const time = state.clock.elapsedTime;
     target.set(
-      state.pointer.x * 0.4 + Math.sin(time * 0.08) * 0.15,
-      state.pointer.y * 0.25 + 0.3 + Math.cos(time * 0.06) * 0.08,
-      6 + Math.sin(time * 0.05) * 0.2
+      state.pointer.x * 0.35 + Math.sin(time * 0.08) * 0.1,
+      state.pointer.y * 0.2 + 0.3,
+      6
     );
-    camera.position.lerp(target, delta * 1.5);
-    camera.lookAt(0, 0.5, -3);
+    camera.position.lerp(target, delta * 1.2);
+    camera.lookAt(0, 0.4, -3);
   });
 
   return null;
 }
 
 /* ═══════════════════════════════════════════════════════
-   SCENE LIGHTING
-   ═══════════════════════════════════════════════════════ */
-function CyberLighting({ reducedMotion }: { reducedMotion: boolean }) {
-  const keyRef = useRef<PointLight>(null);
-  const fillRef = useRef<PointLight>(null);
-
-  useFrame((state) => {
-    if (reducedMotion) return;
-    const time = state.clock.elapsedTime;
-    if (keyRef.current) {
-      keyRef.current.intensity = 4 + Math.sin(time * 0.6) * 1;
-    }
-    if (fillRef.current) {
-      fillRef.current.intensity = 2.5 + Math.cos(time * 0.4) * 0.8;
-    }
-  });
-
-  return (
-    <>
-      <ambientLight intensity={0.08} color="#1a1a2e" />
-      <pointLight ref={keyRef} position={[3, 4, 2]} intensity={4} color="#9dfcc7" distance={15} decay={2} />
-      <pointLight ref={fillRef} position={[-3, 2, 3]} intensity={2.5} color="#9f91ff" distance={12} decay={2} />
-      <pointLight position={[0, -1, 5]} intensity={1.5} color="#85e8ff" distance={8} decay={2} />
-      <directionalLight position={[0, 5, 3]} intensity={0.3} color="#ffffff" />
-    </>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   MAIN SCENE EXPORT
+   MAIN EXPORT
    ═══════════════════════════════════════════════════════ */
 export default function CyberAtmosphere() {
   const reducedMotion = useReducedMotion() ?? false;
@@ -505,63 +389,52 @@ export default function CyberAtmosphere() {
 
   return (
     <Canvas
-      camera={{ position: [0, 0.3, 6], fov: 55, near: 0.1, far: 60 }}
+      camera={{ position: [0, 0.3, 6], fov: 55, near: 0.1, far: 40 }}
       dpr={[1, 1.5]}
-      gl={{ antialias: true, alpha: true }}
+      gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       style={{ position: "absolute", inset: 0 }}
+      frameloop="demand"
     >
       <PerformanceMonitor onDecline={handleDecline} onIncline={handleIncline} />
       <AdaptiveDpr pixelated />
+      {/* Force continuous rendering */}
+      <FrameLoopForcer />
 
       <CyberCameraRig reducedMotion={reducedMotion} />
-      <CyberLighting reducedMotion={reducedMotion} />
 
-      {/* City silhouette */}
-      <CyberpunkBuildings reducedMotion={reducedMotion} />
+      {/* Minimal lighting */}
+      <ambientLight intensity={0.1} color="#1a1a2e" />
+      <pointLight position={[3, 3, 2]} intensity={3} color="#9dfcc7" distance={12} decay={2} />
+      <pointLight position={[-3, 2, 2]} intensity={2} color="#9f91ff" distance={10} decay={2} />
 
-      {/* Neon edge lights on buildings */}
+      <CyberpunkBuildings />
       <NeonStrips reducedMotion={reducedMotion} />
-
-      {/* Floating neon signs */}
       <NeonSigns reducedMotion={reducedMotion} />
+      <StreetLights />
+      <WetGround />
+      <HoloBillboard reducedMotion={reducedMotion} />
 
-      {/* Street lights with bloom */}
-      <StreetLights reducedMotion={reducedMotion} />
-
-      {/* Wet ground reflections */}
-      <WetGround reducedMotion={reducedMotion} />
-
-      {/* Volumetric fog layers */}
-      <VolumetricFog reducedMotion={reducedMotion} />
-
-      {/* Particle rain */}
       {!degraded && <NeonRain reducedMotion={reducedMotion} />}
 
-      {/* Holographic displays */}
-      <HoloDisplay reducedMotion={reducedMotion} />
-
-      {/* Cursor reactive glow */}
       <CursorGlow reducedMotion={reducedMotion} />
 
-      {/* Ambient sparkles */}
-      <Sparkles
-        count={degraded ? 30 : 80}
-        scale={10}
-        size={1.2}
-        speed={0.3}
-        opacity={0.35}
-        color="#85e8ff"
-      />
+      <Sparkles count={degraded ? 15 : 40} scale={8} size={1} speed={0.2} opacity={0.3} color="#85e8ff" />
 
-      {/* Post-processing: heavy bloom for that neon glow */}
       <EffectComposer multisampling={0}>
         <Bloom
-          luminanceThreshold={0.15}
-          luminanceSmoothing={0.85}
-          intensity={degraded ? 0.8 : 1.8}
+          luminanceThreshold={0.3}
+          luminanceSmoothing={0.9}
+          intensity={degraded ? 0.6 : 1.2}
           mipmapBlur
         />
       </EffectComposer>
     </Canvas>
   );
+}
+
+/** Forces the canvas to keep rendering despite frameloop="demand" */
+function FrameLoopForcer() {
+  const { invalidate } = useThree();
+  useFrame(() => { invalidate(); });
+  return null;
 }

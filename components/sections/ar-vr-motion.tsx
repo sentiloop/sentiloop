@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Glasses, Layers3, Orbit, Scan, Sparkles, Waypoints } from "lucide-react";
+import { LazyCanvas } from "@/components/three/lazy-canvas";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -226,13 +227,14 @@ export function ARVRMotion() {
       <div className="ar-vr-grid-overlay absolute inset-0 opacity-30" aria-hidden="true" />
 
       {/* 3D Scene */}
-      <div
-        ref={sceneWrapperRef}
+      <LazyCanvas
         className="absolute inset-0 z-[1]"
-        aria-hidden="true"
+        fallbackClass="ar-vr-scene-fallback"
       >
-        <ARVRScene />
-      </div>
+        <div ref={sceneWrapperRef} className="absolute inset-0" aria-hidden="true">
+          <ARVRScene />
+        </div>
+      </LazyCanvas>
 
       {/* Content Layer */}
       <div className="container-shell relative z-10">

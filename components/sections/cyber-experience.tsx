@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Zap, Globe, Cpu, Shield, Wifi, Eye } from "lucide-react";
+import { LazyCanvas } from "@/components/three/lazy-canvas";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -208,9 +209,11 @@ export function CyberExperience() {
       <div className="cyber-noise absolute inset-0 opacity-[0.015]" aria-hidden="true" />
 
       {/* 3D Scene */}
-      <div ref={sceneRef} className="absolute inset-0 z-[1]" aria-hidden="true">
-        <CyberAtmosphere />
-      </div>
+      <LazyCanvas className="absolute inset-0 z-[1]" fallbackClass="cyber-scene-fallback">
+        <div ref={sceneRef} className="absolute inset-0" aria-hidden="true">
+          <CyberAtmosphere />
+        </div>
+      </LazyCanvas>
 
       {/* Content */}
       <div className="container-shell relative z-10">
