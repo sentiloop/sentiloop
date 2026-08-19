@@ -1,13 +1,23 @@
 "use client";
 
+import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCoverflow, Autoplay, Pagination } from "swiper/modules";
-import { Quote, Star } from "lucide-react";
+import {
+  EffectCoverflow,
+  Autoplay,
+  Pagination,
+  Keyboard,
+  Mousewheel,
+  Navigation,
+} from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
+import { ArrowLeft, ArrowRight, Quote, Star } from "lucide-react";
 import { Reveal, MaskReveal } from "@/components/motion/reveal";
 
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 const testimonials = [
   {
@@ -48,6 +58,8 @@ const testimonials = [
 ];
 
 export function TestimonialsCarousel() {
+  const swiperRef = useRef<SwiperType | null>(null);
+
   return (
     <section className="section-pad relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
@@ -69,21 +81,30 @@ export function TestimonialsCarousel() {
 
         <div className="mt-14">
           <Swiper
-            modules={[EffectCoverflow, Autoplay, Pagination]}
+            modules={[EffectCoverflow, Autoplay, Pagination, Keyboard, Mousewheel, Navigation]}
             effect="coverflow"
             grabCursor
             centeredSlides
             slidesPerView="auto"
             loop
-            autoplay={{ delay: 4000, disableOnInteraction: false, pauseOnMouseEnter: true }}
+            speed={700}
+            autoplay={{ delay: 4500, disableOnInteraction: true, pauseOnMouseEnter: true }}
+            keyboard={{ enabled: true, onlyInViewport: true }}
+            mousewheel={{ forceToAxis: true, sensitivity: 0.4, thresholdDelta: 30 }}
             coverflowEffect={{
               rotate: 0,
               stretch: 0,
-              depth: 180,
-              modifier: 2,
+              depth: 200,
+              modifier: 2.2,
               slideShadows: false,
             }}
-            pagination={{ clickable: true, el: ".swiper-testimonial-pagination" }}
+            pagination={{
+              clickable: true,
+              el: ".swiper-testimonial-pagination",
+              dynamicBullets: true,
+              dynamicMainBullets: 3,
+            }}
+            onSwiper={(swiper) => { swiperRef.current = swiper; }}
             className="testimonial-swiper"
           >
             {testimonials.map((item) => (
@@ -132,7 +153,25 @@ export function TestimonialsCarousel() {
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className="swiper-testimonial-pagination mt-8 flex justify-center gap-1.5" />
+
+          {/* Navigation + Pagination row */}
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <button
+              onClick={() => swiperRef.current?.slidePrev()}
+              className="grid size-9 place-items-center rounded-full border border-white/[0.08] bg-white/[0.03] text-[#6a7f94] backdrop-blur-md transition-all hover:border-[#62d9ff]/30 hover:text-[#62d9ff]"
+              aria-label="Previous testimonial"
+            >
+              <ArrowLeft size={14} />
+            </button>
+            <div className="swiper-testimonial-pagination flex items-center justify-center gap-1.5" />
+            <button
+              onClick={() => swiperRef.current?.slideNext()}
+              className="grid size-9 place-items-center rounded-full border border-white/[0.08] bg-white/[0.03] text-[#6a7f94] backdrop-blur-md transition-all hover:border-[#62d9ff]/30 hover:text-[#62d9ff]"
+              aria-label="Next testimonial"
+            >
+              <ArrowRight size={14} />
+            </button>
+          </div>
         </div>
       </div>
     </section>

@@ -1315,3 +1315,108 @@ button:focus-visible {
     display: none;
   }
 }
+
+/* ─────────────────────────────────────────────────
+   Swiper Advanced Styles (Creative, Parallax, Thumbs)
+   ───────────────────────────────────────────────── */
+
+/* Creative Showcase Section */
+.creative-showcase-section {
+  position: relative;
+}
+
+.creative-main-swiper {
+  overflow: visible !important;
+}
+
+.creative-main-swiper .swiper-slide {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.creative-slide {
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.creative-slide:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.06),
+    0 30px 80px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(157, 252, 199, 0.03);
+}
+
+.creative-pagination {
+  font-variant-numeric: tabular-nums;
+}
+
+.creative-pagination .swiper-pagination-current {
+  color: #9dfcc7;
+  font-weight: 600;
+}
+
+.creative-nav-btn {
+  transition: all 0.3s ease;
+}
+
+.creative-nav-btn:active {
+  transform: scale(0.92);
+}
+
+/* Thumbs gallery */
+.creative-thumbs-swiper {
+  padding: 4px 0;
+}
+
+.creative-thumb {
+  user-select: none;
+}
+
+/* Feature slider creative view */
+.feature-creative-swiper .swiper-slide {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.5s ease;
+}
+
+/* Testimonials enhanced styles */
+.testimonial-swiper .swiper-slide {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.swiper-testimonial-pagination .swiper-pagination-bullet {
+  width: 6px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  transition: all 0.4s ease;
+  opacity: 1;
+}
+
+.swiper-testimonial-pagination .swiper-pagination-bullet-active {
+  background: #9dfcc7;
+  box-shadow: 0 0 8px rgba(157, 252, 199, 0.4);
+  width: 20px;
+  border-radius: 10px;
+}
+
+/* Dynamic bullets sizing */
+.swiper-testimonial-pagination .swiper-pagination-bullet-active-prev,
+.swiper-testimonial-pagination .swiper-pagination-bullet-active-next {
+  transform: scale(0.8);
+  opacity: 0.6;
+}
+
+.swiper-testimonial-pagination .swiper-pagination-bullet-active-prev-prev,
+.swiper-testimonial-pagination .swiper-pagination-bullet-active-next-next {
+  transform: scale(0.6);
+  opacity: 0.3;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .creative-main-swiper .swiper-slide,
+  .feature-creative-swiper .swiper-slide,
+  .testimonial-swiper .swiper-slide {
+    transition: none !important;
+  }
+}

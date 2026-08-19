@@ -1,7 +1,7 @@
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, FreeMode } from "swiper/modules";
+import { Autoplay, FreeMode, EffectCreative, Keyboard } from "swiper/modules";
 import {
   Brain,
   Eye,
@@ -17,6 +17,7 @@ import { Reveal, MaskReveal } from "@/components/motion/reveal";
 
 import "swiper/css";
 import "swiper/css/free-mode";
+import "swiper/css/effect-creative";
 
 const features = [
   { icon: Brain, title: "Neural Processing", desc: "Deep contextual understanding across millions of signals", color: "#62d9ff" },
@@ -46,10 +47,11 @@ export function FeatureSlider() {
         </div>
       </div>
 
+      {/* Primary: continuous free-mode scroll (unchanged but enhanced) */}
       <div className="mt-12">
         <Swiper
           modules={[Autoplay, FreeMode]}
-          freeMode
+          freeMode={{ enabled: true, momentum: true, momentumRatio: 0.6 }}
           grabCursor
           slidesPerView="auto"
           spaceBetween={16}
@@ -66,7 +68,6 @@ export function FeatureSlider() {
                   background: "linear-gradient(155deg, rgba(8, 16, 32, 0.88), rgba(4, 8, 20, 0.8))",
                 }}
               >
-                {/* Hover glow */}
                 <div
                   className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                   style={{ background: `radial-gradient(circle at 50% 50%, ${item.color}08, transparent 60%)` }}
@@ -83,10 +84,75 @@ export function FeatureSlider() {
                   <p className="mt-2 text-[11px] leading-[1.5] text-[#6a7f94]">{item.desc}</p>
                 </div>
 
-                {/* Bottom accent line */}
                 <div
                   className="absolute bottom-0 left-0 h-[2px] w-0 transition-all duration-700 group-hover:w-full"
                   style={{ background: `linear-gradient(90deg, transparent, ${item.color}, transparent)` }}
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+
+      {/* Secondary: Creative Effect cards slider (interactive, keyboard-enabled) */}
+      <div className="container-shell mt-10">
+        <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.15em] text-[#5e6763]">
+          Interactive view — swipe or use keyboard
+        </p>
+        <Swiper
+          modules={[EffectCreative, Keyboard, Autoplay]}
+          effect="creative"
+          creativeEffect={{
+            prev: {
+              shadow: false,
+              translate: ["-20%", 0, -200],
+              rotate: [0, 0, -5],
+              opacity: 0.6,
+            },
+            next: {
+              shadow: false,
+              translate: ["100%", 0, 0],
+              opacity: 0.4,
+            },
+          }}
+          keyboard={{ enabled: true, onlyInViewport: true }}
+          grabCursor
+          slidesPerView={1.3}
+          spaceBetween={16}
+          speed={600}
+          breakpoints={{
+            640: { slidesPerView: 2.2 },
+            1024: { slidesPerView: 3.2 },
+          }}
+          autoplay={{ delay: 5000, disableOnInteraction: true, pauseOnMouseEnter: true }}
+          className="feature-creative-swiper"
+        >
+          {features.map((item) => (
+            <SwiperSlide key={`creative-${item.title}`}>
+              <div
+                className="group relative overflow-hidden rounded-[20px] border border-white/[0.07] p-5 h-[160px] transition-all duration-400 hover:border-white/[0.15]"
+                style={{
+                  background: "linear-gradient(155deg, rgba(8, 16, 32, 0.88), rgba(4, 8, 20, 0.8))",
+                }}
+              >
+                <div className="relative flex items-start gap-3">
+                  <div
+                    className="grid size-9 shrink-0 place-items-center rounded-lg border border-white/[0.08]"
+                    style={{ background: `${item.color}0d` }}
+                  >
+                    <item.icon size={16} style={{ color: item.color }} strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-white tracking-[-0.02em]">{item.title}</h3>
+                    <p className="mt-1.5 text-[11px] leading-[1.5] text-[#6a7f94]">{item.desc}</p>
+                  </div>
+                </div>
+
+                {/* Hover glow */}
+                <div
+                  className="pointer-events-none absolute -right-8 -bottom-8 size-32 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-30"
+                  style={{ background: item.color }}
+                  aria-hidden="true"
                 />
               </div>
             </SwiperSlide>
