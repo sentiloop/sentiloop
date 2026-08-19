@@ -7,6 +7,7 @@ import { CTA } from "@/components/sections/cta";
 import { FeatureSlider } from "@/components/sections/feature-slider";
 import { Hero } from "@/components/sections/hero";
 import { ARVRMotion } from "@/components/sections/ar-vr-motion";
+import { CyberExperience } from "@/components/sections/cyber-experience";
 import { HolographicCards } from "@/components/sections/holographic-cards";
 import { Intelligence } from "@/components/sections/intelligence";
 import { LiveDemo } from "@/components/sections/live-demo";
@@ -40,6 +41,7 @@ export default function Home() {
         <Intelligence />
         <AIShowcase />
         <ARVRMotion />
+        <CyberExperience />
         <HolographicCards />
         <TestimonialsCarousel />
         <PricingSection />

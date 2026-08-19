@@ -1173,3 +1173,145 @@ button:focus-visible {
     display: none;
   }
 }
+
+/* ─────────────────────────────────────────────────
+   Cyberpunk Experience Section (samsy.ninja inspired)
+   ───────────────────────────────────────────────── */
+
+.cyber-section {
+  background: linear-gradient(
+    180deg,
+    #050608 0%,
+    #08070c 20%,
+    #0a0810 50%,
+    #08070c 80%,
+    #050608 100%
+  );
+}
+
+.cyber-bg {
+  background:
+    radial-gradient(ellipse 60% 40% at 25% 35%, rgba(255, 107, 157, 0.03), transparent),
+    radial-gradient(ellipse 55% 45% at 75% 60%, rgba(157, 252, 199, 0.025), transparent),
+    radial-gradient(ellipse 45% 35% at 50% 80%, rgba(159, 145, 255, 0.02), transparent);
+  pointer-events: none;
+}
+
+.cyber-grid-overlay {
+  background-image:
+    linear-gradient(rgba(255, 107, 157, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 107, 157, 0.015) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 15%, transparent 65%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 15%, transparent 65%);
+  pointer-events: none;
+}
+
+.cyber-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.cyber-scene-fallback {
+  background:
+    radial-gradient(ellipse at center, rgba(255, 107, 157, 0.02) 0%, transparent 60%),
+    #050608;
+}
+
+.cyber-title-gradient {
+  background: linear-gradient(
+    135deg,
+    #ff6b9d 0%,
+    #9f91ff 35%,
+    #85e8ff 60%,
+    #9dfcc7 85%,
+    #ff6b9d 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: cyber-gradient-shift 8s ease-in-out infinite;
+}
+
+@keyframes cyber-gradient-shift {
+  0%, 100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 300% center;
+  }
+}
+
+.cyber-card {
+  position: relative;
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    transform 0.4s ease;
+}
+
+.cyber-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 107, 157, 0.015) 0%,
+    transparent 40%
+  );
+  pointer-events: none;
+}
+
+.cyber-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 107, 157, 0.15);
+  box-shadow:
+    0 12px 50px rgba(0, 0, 0, 0.3),
+    0 0 25px rgba(255, 107, 157, 0.03);
+}
+
+.cyber-card-neon {
+  transition: opacity 0.4s ease;
+}
+
+.cyber-tech-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-tech-badge::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 107, 157, 0.08),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.cyber-tech-badge:hover::after {
+  left: 100%;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .cyber-title-gradient {
+    animation: none !important;
+  }
+
+  .cyber-card:hover {
+    transform: none;
+  }
+
+  .cyber-tech-badge::after {
+    display: none;
+  }
+}
