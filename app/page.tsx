@@ -17,6 +17,7 @@ import { PricingSection } from "@/components/sections/pricing-section";
 import { Results } from "@/components/sections/results";
 import { ServicesOverview } from "@/components/sections/services-overview";
 import { SignalStrip } from "@/components/sections/signal-strip";
+import { SplineExperience } from "@/components/sections/spline-experience";
 import { TestimonialsCarousel } from "@/components/sections/testimonials-carousel";
 import { Workflow } from "@/components/sections/workflow";
 import { MouseTrail } from "@/components/effects/mouse-trail";
@@ -43,6 +44,7 @@ export default function Home() {
         <AIShowcase />
         <ARVRMotion />
         <CyberExperience />
+        <SplineExperience />
         <HolographicCards />
         <CreativeShowcase />
         <TestimonialsCarousel />

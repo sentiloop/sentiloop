@@ -1420,3 +1420,85 @@ button:focus-visible {
     transition: none !important;
   }
 }
+
+/* ─────────────────────────────────────────────────
+   Spline-Inspired 3D Experience Section
+   ───────────────────────────────────────────────── */
+
+.spline-section {
+  background: linear-gradient(
+    180deg,
+    #050608 0%,
+    #07060d 20%,
+    #0a080f 50%,
+    #07060d 80%,
+    #050608 100%
+  );
+}
+
+.spline-bg {
+  background:
+    radial-gradient(ellipse 55% 40% at 55% 45%, rgba(159, 145, 255, 0.035), transparent),
+    radial-gradient(ellipse 50% 35% at 30% 55%, rgba(157, 252, 199, 0.025), transparent),
+    radial-gradient(ellipse 45% 30% at 70% 35%, rgba(133, 232, 255, 0.02), transparent);
+  pointer-events: none;
+}
+
+.spline-scene-fallback {
+  background:
+    radial-gradient(ellipse at 55% 45%, rgba(159, 145, 255, 0.03) 0%, transparent 55%),
+    #050608;
+}
+
+.spline-title-gradient {
+  background: linear-gradient(
+    135deg,
+    #9f91ff 0%,
+    #85e8ff 30%,
+    #9dfcc7 55%,
+    #ff6b9d 80%,
+    #9f91ff 100%
+  );
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: spline-gradient-shift 7s ease-in-out infinite;
+}
+
+@keyframes spline-gradient-shift {
+  0%, 100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 250% center;
+  }
+}
+
+.spline-card {
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+.spline-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.25),
+    0 0 20px rgba(159, 145, 255, 0.03);
+}
+
+.spline-card-glow {
+  border-radius: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spline-title-gradient {
+    animation: none !important;
+  }
+
+  .spline-card:hover {
+    transform: none;
+  }
+}
