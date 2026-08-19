@@ -1,7 +1,7 @@
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, FreeMode, Keyboard, Navigation } from "swiper/modules";
+import { Autoplay, FreeMode, Keyboard } from "swiper/modules";
 import {
   Brain,
   Eye,
@@ -17,7 +17,6 @@ import { Reveal, MaskReveal } from "@/components/motion/reveal";
 
 import "swiper/css";
 import "swiper/css/free-mode";
-import "swiper/css/navigation";
 
 const features = [
   { icon: Brain, title: "Neural Processing", desc: "Deep contextual understanding across millions of signals", color: "#62d9ff" },
@@ -94,28 +93,27 @@ export function FeatureSlider() {
         </Swiper>
       </div>
 
-      {/* Secondary: Interactive cards slider with keyboard + swipe */}
-      <div className="container-shell mt-10">
-        <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.15em] text-[#5e6763]">
-          Interactive view — swipe or use keyboard
-        </p>
+      {/* Secondary: Smooth auto-sliding interactive view */}
+      <div className="mt-10">
+        <div className="container-shell">
+          <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.15em] text-[#5e6763]">
+            Interactive view — swipe or use keyboard
+          </p>
+        </div>
         <Swiper
-          modules={[Keyboard, Autoplay, Navigation]}
+          modules={[Autoplay, FreeMode, Keyboard]}
+          freeMode={{ enabled: true, momentum: true, momentumRatio: 0.4 }}
           keyboard={{ enabled: true, onlyInViewport: true }}
-          navigation
           grabCursor
-          slidesPerView={1.3}
+          loop
+          slidesPerView="auto"
           spaceBetween={16}
-          speed={600}
-          breakpoints={{
-            640: { slidesPerView: 2.2 },
-            1024: { slidesPerView: 3.2 },
-          }}
-          autoplay={{ delay: 5000, disableOnInteraction: true, pauseOnMouseEnter: true }}
+          speed={5000}
+          autoplay={{ delay: 0, disableOnInteraction: false, pauseOnMouseEnter: true }}
           className="feature-interactive-swiper"
         >
-          {features.map((item) => (
-            <SwiperSlide key={`creative-${item.title}`}>
+          {[...features, ...features].map((item, index) => (
+            <SwiperSlide key={`interactive-${item.title}-${index}`} className="!w-[300px]">
               <div
                 className="group relative overflow-hidden rounded-[20px] border border-white/[0.07] p-5 h-[160px] transition-all duration-400 hover:border-white/[0.15]"
                 style={{

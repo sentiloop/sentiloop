@@ -1502,3 +1502,8 @@ button:focus-visible {
     transform: none;
   }
 }
+
+/* Feature interactive slider — smooth linear autoplay */
+.feature-interactive-swiper .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
