@@ -1,7 +1,7 @@
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, FreeMode, EffectCreative, Keyboard } from "swiper/modules";
+import { Autoplay, FreeMode, Keyboard, Navigation } from "swiper/modules";
 import {
   Brain,
   Eye,
@@ -17,7 +17,7 @@ import { Reveal, MaskReveal } from "@/components/motion/reveal";
 
 import "swiper/css";
 import "swiper/css/free-mode";
-import "swiper/css/effect-creative";
+import "swiper/css/navigation";
 
 const features = [
   { icon: Brain, title: "Neural Processing", desc: "Deep contextual understanding across millions of signals", color: "#62d9ff" },
@@ -94,28 +94,15 @@ export function FeatureSlider() {
         </Swiper>
       </div>
 
-      {/* Secondary: Creative Effect cards slider (interactive, keyboard-enabled) */}
+      {/* Secondary: Interactive cards slider with keyboard + swipe */}
       <div className="container-shell mt-10">
         <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.15em] text-[#5e6763]">
           Interactive view — swipe or use keyboard
         </p>
         <Swiper
-          modules={[EffectCreative, Keyboard, Autoplay]}
-          effect="creative"
-          creativeEffect={{
-            prev: {
-              shadow: false,
-              translate: ["-20%", 0, -200],
-              rotate: [0, 0, -5],
-              opacity: 0.6,
-            },
-            next: {
-              shadow: false,
-              translate: ["100%", 0, 0],
-              opacity: 0.4,
-            },
-          }}
+          modules={[Keyboard, Autoplay, Navigation]}
           keyboard={{ enabled: true, onlyInViewport: true }}
+          navigation
           grabCursor
           slidesPerView={1.3}
           spaceBetween={16}
@@ -125,7 +112,7 @@ export function FeatureSlider() {
             1024: { slidesPerView: 3.2 },
           }}
           autoplay={{ delay: 5000, disableOnInteraction: true, pauseOnMouseEnter: true }}
-          className="feature-creative-swiper"
+          className="feature-interactive-swiper"
         >
           {features.map((item) => (
             <SwiperSlide key={`creative-${item.title}`}>
