@@ -1070,12 +1070,22 @@ button:focus-visible {
 
 .scroll-gallery-section {
   position: relative;
-  min-height: 100vh;
+  min-height: auto;
+}
+
+.scroll-gallery-viewport {
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.scroll-gallery-viewport::-webkit-scrollbar {
+  display: none;
 }
 
 .scroll-gallery-track {
   cursor: grab;
   user-select: none;
+  width: max-content;
 }
 
 .scroll-gallery-track:active {
@@ -1083,10 +1093,6 @@ button:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scroll-gallery-section {
-    min-height: auto;
-  }
-
   .scroll-gallery-track {
     cursor: default;
   }

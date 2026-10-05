@@ -1,9 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Draggable } from "gsap/Draggable";
 import {
   Activity,
   Brain,
@@ -15,8 +12,6 @@ import {
   BarChart3,
 } from "lucide-react";
 import { Reveal } from "@/components/motion/reveal";
-
-gsap.registerPlugin(ScrollTrigger, Draggable);
 
 const galleryItems = [
   {
@@ -78,73 +73,36 @@ const galleryItems = [
 ];
 
 export function ScrollGallery() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
+    const sync = () => setReduced(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
   }, []);
 
   useEffect(() => {
-    if (reduced || !sectionRef.current || !trackRef.current) return;
+    if (reduced) return;
+    const viewport = viewportRef.current;
+    if (!viewport) return;
 
-    const ctx = gsap.context(() => {
-      const track = trackRef.current!;
-      const cards = track.querySelectorAll<HTMLElement>(".gallery-card");
-      const totalScroll = track.scrollWidth - track.offsetWidth;
+    const onWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      if (viewport.scrollWidth <= viewport.clientWidth) return;
 
-      // Horizontal scroll via ScrollTrigger
-      const scrollTween = gsap.to(track, {
-        x: -totalScroll,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: () => `+=${totalScroll}`,
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
+      const atStart = viewport.scrollLeft <= 0 && event.deltaY < 0;
+      const atEnd = viewport.scrollLeft + viewport.clientWidth >= viewport.scrollWidth - 1 && event.deltaY > 0;
+      if (atStart || atEnd) return;
 
-      // Parallax offset per card
-      cards.forEach((card, i) => {
-        gsap.to(card, {
-          x: (i - 3) * -15,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top top",
-            end: () => `+=${totalScroll}`,
-            scrub: 1.5,
-          },
-        });
-      });
+      event.preventDefault();
+      viewport.scrollLeft += event.deltaY;
+    };
 
-      // Draggable
-      Draggable.create(track, {
-        type: "x",
-        bounds: { minX: -totalScroll, maxX: 0 },
-        inertia: true,
-        cursor: "grab",
-        activeCursor: "grabbing",
-        onDrag() {
-          const progress = -this.x / totalScroll;
-          scrollTween.scrollTrigger?.scroll(
-            scrollTween.scrollTrigger.start +
-              progress * (scrollTween.scrollTrigger.end - scrollTween.scrollTrigger.start)
-          );
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    viewport.addEventListener("wheel", onWheel, { passive: false });
+    return () => viewport.removeEventListener("wheel", onWheel);
   }, [reduced]);
 
   if (reduced) {
@@ -168,7 +126,7 @@ export function ScrollGallery() {
   }
 
   return (
-    <section ref={sectionRef} className="scroll-gallery-section relative overflow-hidden">
+    <section className="scroll-gallery-section relative overflow-hidden">
       <div className="container-shell pt-[clamp(6rem,12vw,10rem)]">
         <Reveal>
           <span className="eyebrow">Gallery</span>
@@ -178,11 +136,8 @@ export function ScrollGallery() {
         </h2>
       </div>
 
-      <div className="mt-12 overflow-hidden">
-        <div
-          ref={trackRef}
-          className="scroll-gallery-track flex gap-6 px-[max(20px,calc((100vw-1200px)/2))]"
-        >
+      <div ref={viewportRef} className="scroll-gallery-viewport mt-12 overflow-x-auto">
+        <div className="scroll-gallery-track flex gap-6 px-[max(20px,calc((100vw-1200px)/2))]">
           {galleryItems.map((item) => (
             <GalleryCard key={item.title} item={item} />
           ))}
@@ -204,26 +159,19 @@ function GalleryCard({
       <div
         className="group relative h-[400px] overflow-hidden rounded-2xl border border-white/[0.08] transition-all duration-500 hover:border-white/[0.18]"
         style={{
-          background:
-            "linear-gradient(165deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015))",
+          background: "linear-gradient(165deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015))",
           backdropFilter: "blur(12px)",
-          boxShadow: `inset 0 1px rgba(255,255,255,0.06), 0 20px 60px rgba(0,0,0,0.3)`,
+          boxShadow: "inset 0 1px rgba(255,255,255,0.06), 0 20px 60px rgba(0,0,0,0.3)",
         }}
       >
-        {/* Abstract gradient visual */}
         <div
           className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-40 transition-opacity duration-500 group-hover:opacity-60`}
         />
 
-        {/* Decorative circles */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className="h-32 w-32 rounded-full opacity-20 blur-xl"
-            style={{ background: accent }}
-          />
+          <div className="h-32 w-32 rounded-full opacity-20 blur-xl" style={{ background: accent }} />
         </div>
 
-        {/* Icon */}
         <div className="absolute inset-0 flex items-center justify-center">
           <Icon
             size={48}
@@ -233,13 +181,11 @@ function GalleryCard({
           />
         </div>
 
-        {/* Bottom info */}
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent p-5 pt-16">
           <p className="text-sm font-medium text-white">{title}</p>
           <p className="mt-1 text-[11px] text-white/50">{subtitle}</p>
         </div>
 
-        {/* Accent line */}
         <div
           className="absolute bottom-0 left-0 h-[2px] w-0 transition-all duration-500 group-hover:w-full"
           style={{ background: accent }}
