@@ -9,19 +9,24 @@ import { useEffect, useRef, useState } from "react";
  */
 export function AmbientParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [reduced, setReduced] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const coarsePointer = window.matchMedia("(pointer: coarse)");
+    const sync = () => setDisabled(reducedMotion.matches || coarsePointer.matches);
+    sync();
+    reducedMotion.addEventListener("change", sync);
+    coarsePointer.addEventListener("change", sync);
+    return () => {
+      reducedMotion.removeEventListener("change", sync);
+      coarsePointer.removeEventListener("change", sync);
+    };
   }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || reduced) return;
+    if (!canvas || disabled) return;
 
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
@@ -71,6 +76,11 @@ export function AmbientParticles() {
     }
 
     function draw() {
+      if (document.hidden) {
+        animId = 0;
+        return;
+      }
+
       ctx!.clearRect(0, 0, width * 0.5, height * 0.5);
 
       // Fog gradient overlay
@@ -120,14 +130,19 @@ export function AmbientParticles() {
     init();
     animId = requestAnimationFrame(draw);
     window.addEventListener("resize", resize);
+    const onVisibilityChange = () => {
+      if (!document.hidden && !animId) animId = requestAnimationFrame(draw);
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, [reduced]);
+  }, [disabled]);
 
-  if (reduced) return null;
+  if (disabled) return null;
 
   return (
     <canvas

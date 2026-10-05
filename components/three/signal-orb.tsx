@@ -399,7 +399,7 @@ function PostEffects({ enabled }: { enabled: boolean }) {
   if (!enabled) return null;
 
   return (
-    <EffectComposer multisampling={0} resolutionScale={0.6} enableNormalPass={false} depthBuffer={false}>
+    <EffectComposer multisampling={0} resolutionScale={0.55} enableNormalPass={false} depthBuffer={false}>
       <Bloom mipmapBlur intensity={0.58} luminanceThreshold={0.72} luminanceSmoothing={0.24} levels={4} />
     </EffectComposer>
   );
@@ -412,7 +412,7 @@ export default function SignalOrb() {
 
   return (
     <Canvas
-      dpr={[0.85, 1.5]}
+      dpr={[0.75, 1.25]}
       camera={{ position: [0, 0, 6.2], fov: 47 }}
       gl={{ alpha: true, antialias: false, powerPreference: "high-performance", stencil: false }}
       performance={{ min: 0.45, max: 1, debounce: 180 }}

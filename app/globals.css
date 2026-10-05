@@ -157,6 +157,72 @@ button {
   -webkit-backdrop-filter: blur(18px);
 }
 
+.hud-frame {
+  border: 1px solid color-mix(in srgb, var(--hud-accent) 24%, rgba(255, 255, 255, 0.08));
+  background: linear-gradient(155deg, rgba(8, 16, 32, 0.9), rgba(4, 8, 20, 0.78));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.07), 0 24px 70px rgba(0, 0, 0, 0.22), 0 0 30px color-mix(in srgb, var(--hud-accent) 7%, transparent);
+  transition: border-color 300ms ease, transform 300ms ease, box-shadow 300ms ease;
+}
+
+.hud-frame:hover {
+  border-color: color-mix(in srgb, var(--hud-accent) 48%, rgba(255, 255, 255, 0.12));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 28px 80px rgba(0, 0, 0, 0.28), 0 0 38px color-mix(in srgb, var(--hud-accent) 12%, transparent);
+  transform: translateY(-2px);
+}
+
+.hud-frame-grid {
+  opacity: 0.4;
+  background-image: linear-gradient(color-mix(in srgb, var(--hud-accent) 10%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--hud-accent) 10%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(135deg, black, transparent 78%);
+  -webkit-mask-image: linear-gradient(135deg, black, transparent 78%);
+}
+
+.hud-frame-scan {
+  background: linear-gradient(180deg, transparent, var(--hud-accent), transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--hud-accent) 72%, transparent);
+  opacity: 0.75;
+  animation: hud-frame-scan 4.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+.hud-frame-meta {
+  color: color-mix(in srgb, var(--hud-accent) 70%, #81908a);
+}
+
+.hud-frame-dot {
+  background: var(--hud-accent);
+  box-shadow: 0 0 9px var(--hud-accent);
+}
+
+.hud-frame-corner {
+  position: absolute;
+  z-index: 2;
+  width: 11px;
+  height: 11px;
+  border-color: var(--hud-accent);
+  opacity: 0.8;
+}
+
+.hud-frame-corner-tl {
+  top: 9px;
+  left: 9px;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+
+.hud-frame-corner-br {
+  right: 9px;
+  bottom: 9px;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+}
+
+@keyframes hud-frame-scan {
+  0%, 100% { transform: translateY(-110%); opacity: 0; }
+  15%, 70% { opacity: 0.75; }
+  85% { transform: translateY(820%); opacity: 0; }
+}
+
 .hairline {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--line-bright), transparent);

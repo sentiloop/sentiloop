@@ -5,6 +5,7 @@ import { Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { HUDFrame } from "@/components/ui/hud-frame";
 
 interface PricingTier {
   name: string;
@@ -65,7 +66,7 @@ const tiers: PricingTier[] = [
   },
 ];
 
-function PricingCard({ tier }: { tier: PricingTier }) {
+function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -95,6 +96,7 @@ function PricingCard({ tier }: { tier: PricingTier }) {
       )}
 
       {/* Card content */}
+      <HUDFrame label={`Engagement / ${tier.name}`} index={String(index + 1).padStart(2, "0")} accent={tier.color} className="h-full p-3">
       <div
         className="relative z-[3] flex h-full flex-col rounded-[1.5rem] border p-7 transition-colors duration-300"
         style={{
@@ -150,6 +152,7 @@ function PricingCard({ tier }: { tier: PricingTier }) {
           {tier.cta}
         </Link>
       </div>
+      </HUDFrame>
     </motion.div>
   );
 }
@@ -169,9 +172,9 @@ export function PricingSection() {
           className="mt-16 grid grid-cols-1 items-start gap-6 lg:grid-cols-3"
           stagger={0.12}
         >
-          {tiers.map((tier) => (
+          {tiers.map((tier, index) => (
             <StaggerItem key={tier.name} preset="tilt">
-              <PricingCard tier={tier} />
+              <PricingCard tier={tier} index={index} />
             </StaggerItem>
           ))}
         </Stagger>

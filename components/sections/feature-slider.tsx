@@ -14,6 +14,7 @@ import {
   Zap,
 } from "lucide-react";
 import { Reveal, MaskReveal } from "@/components/motion/reveal";
+import { HUDFrame } from "@/components/ui/hud-frame";
 
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -59,14 +60,9 @@ export function FeatureSlider() {
           autoplay={{ delay: 0, disableOnInteraction: false }}
           className="feature-slider-swiper"
         >
-          {features.map((item) => (
+          {features.map((item, index) => (
             <SwiperSlide key={item.title} className="!w-[280px]">
-              <div
-                className="group relative overflow-hidden rounded-[20px] border border-white/[0.07] p-5 h-[180px] transition-all duration-400 hover:border-white/[0.15]"
-                style={{
-                  background: "linear-gradient(155deg, rgba(8, 16, 32, 0.88), rgba(4, 8, 20, 0.8))",
-                }}
-              >
+              <HUDFrame label="Capability" index={String(index + 1).padStart(2, "0")} accent={item.color} className="group h-[180px] p-5 transition-all duration-400">
                 <div
                   className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                   style={{ background: `radial-gradient(circle at 50% 50%, ${item.color}08, transparent 60%)` }}
@@ -87,7 +83,7 @@ export function FeatureSlider() {
                   className="absolute bottom-0 left-0 h-[2px] w-0 transition-all duration-700 group-hover:w-full"
                   style={{ background: `linear-gradient(90deg, transparent, ${item.color}, transparent)` }}
                 />
-              </div>
+              </HUDFrame>
             </SwiperSlide>
           ))}
         </Swiper>
@@ -114,12 +110,7 @@ export function FeatureSlider() {
         >
           {[...features, ...features].map((item, index) => (
             <SwiperSlide key={`interactive-${item.title}-${index}`} className="!w-[300px]">
-              <div
-                className="group relative overflow-hidden rounded-[20px] border border-white/[0.07] p-5 h-[160px] transition-all duration-400 hover:border-white/[0.15]"
-                style={{
-                  background: "linear-gradient(155deg, rgba(8, 16, 32, 0.88), rgba(4, 8, 20, 0.8))",
-                }}
-              >
+              <HUDFrame label="Module" index={String((index % features.length) + 1).padStart(2, "0")} accent={item.color} className="group h-[160px] p-5 transition-all duration-400">
                 <div className="relative flex items-start gap-3">
                   <div
                     className="grid size-9 shrink-0 place-items-center rounded-lg border border-white/[0.08]"
@@ -139,7 +130,7 @@ export function FeatureSlider() {
                   style={{ background: item.color }}
                   aria-hidden="true"
                 />
-              </div>
+              </HUDFrame>
             </SwiperSlide>
           ))}
         </Swiper>
