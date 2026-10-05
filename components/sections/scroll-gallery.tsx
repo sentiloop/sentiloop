@@ -74,6 +74,8 @@ const galleryItems = [
 
 export function ScrollGallery() {
   const viewportRef = useRef<HTMLDivElement>(null);
+  const targetScrollLeftRef = useRef(0);
+  const animationFrameRef = useRef<number | null>(null);
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
@@ -89,20 +91,52 @@ export function ScrollGallery() {
     const viewport = viewportRef.current;
     if (!viewport) return;
 
+    targetScrollLeftRef.current = viewport.scrollLeft;
+
+    const animateScroll = () => {
+      const current = viewport.scrollLeft;
+      const target = targetScrollLeftRef.current;
+      const next = current + (target - current) * 0.16;
+      viewport.scrollLeft = next;
+
+      if (Math.abs(target - next) > 0.5) {
+        animationFrameRef.current = requestAnimationFrame(animateScroll);
+      } else {
+        viewport.scrollLeft = target;
+        animationFrameRef.current = null;
+      }
+    };
+
     const onWheel = (event: WheelEvent) => {
       if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
       if (viewport.scrollWidth <= viewport.clientWidth) return;
 
+      const maxScrollLeft = viewport.scrollWidth - viewport.clientWidth;
       const atStart = viewport.scrollLeft <= 0 && event.deltaY < 0;
-      const atEnd = viewport.scrollLeft + viewport.clientWidth >= viewport.scrollWidth - 1 && event.deltaY > 0;
+      const atEnd = viewport.scrollLeft >= maxScrollLeft - 1 && event.deltaY > 0;
       if (atStart || atEnd) return;
 
       event.preventDefault();
-      viewport.scrollLeft += event.deltaY;
+      targetScrollLeftRef.current = Math.max(
+        0,
+        Math.min(maxScrollLeft, targetScrollLeftRef.current + event.deltaY * 1.15),
+      );
+      if (animationFrameRef.current === null) {
+        animationFrameRef.current = requestAnimationFrame(animateScroll);
+      }
+    };
+    const onScroll = () => {
+      if (animationFrameRef.current === null) targetScrollLeftRef.current = viewport.scrollLeft;
     };
 
     viewport.addEventListener("wheel", onWheel, { passive: false });
-    return () => viewport.removeEventListener("wheel", onWheel);
+    viewport.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      viewport.removeEventListener("wheel", onWheel);
+      viewport.removeEventListener("scroll", onScroll);
+      if (animationFrameRef.current !== null) cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    };
   }, [reduced]);
 
   if (reduced) {
@@ -136,7 +170,7 @@ export function ScrollGallery() {
         </h2>
       </div>
 
-      <div ref={viewportRef} className="scroll-gallery-viewport mt-12 overflow-x-auto">
+      <div ref={viewportRef} data-lenis-prevent className="scroll-gallery-viewport mt-12 overflow-x-auto">
         <div className="scroll-gallery-track flex gap-6 px-[max(20px,calc((100vw-1200px)/2))]">
           {galleryItems.map((item) => (
             <GalleryCard key={item.title} item={item} />

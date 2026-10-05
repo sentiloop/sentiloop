@@ -13,20 +13,44 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
-      duration: 1.05,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      autoRaf: false,
+      lerp: 0.1,
       smoothWheel: true,
-      wheelMultiplier: 0.85,
-      touchMultiplier: 1.15,
+      wheelMultiplier: 0.82,
+      touchMultiplier: 1.05,
+      syncTouch: false,
     });
 
     const update = (time: number) => lenis.raf(time * 1000);
+    const onAnchorClick = (event: MouseEvent) => {
+      const origin = event.target;
+      if (!(origin instanceof Element)) return;
+
+      const link = origin.closest<HTMLAnchorElement>("a[href^='#']");
+      const hash = link?.getAttribute("href");
+      if (!link || !hash || hash === "#" || link.target === "_blank") return;
+
+      const destination = document.querySelector<HTMLElement>(hash);
+      if (!destination) return;
+
+      event.preventDefault();
+      lenis.scrollTo(destination, { offset: -24 });
+      window.history.replaceState(null, "", hash);
+    };
+    const onVisibilityChange = () => {
+      if (document.hidden) lenis.stop();
+      else lenis.start();
+    };
 
     lenis.on("scroll", ScrollTrigger.update);
+    document.addEventListener("click", onAnchorClick);
+    document.addEventListener("visibilitychange", onVisibilityChange);
     gsap.ticker.add(update);
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(1000, 16);
 
     return () => {
+      document.removeEventListener("click", onAnchorClick);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       gsap.ticker.remove(update);
       lenis.destroy();
     };
