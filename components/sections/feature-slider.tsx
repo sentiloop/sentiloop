@@ -1,7 +1,9 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, FreeMode, Keyboard } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
+import { A11y, Autoplay, FreeMode, Keyboard, Mousewheel, Pagination } from "swiper/modules";
 import {
   Brain,
   Eye,
@@ -18,6 +20,7 @@ import { HUDFrame } from "@/components/ui/hud-frame";
 
 import "swiper/css";
 import "swiper/css/free-mode";
+import "swiper/css/pagination";
 
 const features = [
   { icon: Brain, title: "Neural Processing", desc: "Deep contextual understanding across millions of signals", color: "#62d9ff" },
@@ -32,6 +35,9 @@ const features = [
 ];
 
 export function FeatureSlider() {
+  const interactiveSwiperRef = useRef<SwiperType | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <section className="section-pad relative overflow-hidden">
       <div className="container-shell">
@@ -89,27 +95,44 @@ export function FeatureSlider() {
         </Swiper>
       </div>
 
-      {/* Secondary: Smooth auto-sliding interactive view */}
+      {/* Secondary: premium-style interactive signal deck */}
       <div className="mt-10">
-        <div className="container-shell">
+        <div className="container-shell flex flex-wrap items-center justify-between gap-3">
           <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.15em] text-[#5e6763]">
-            Interactive view — swipe or use keyboard
+            Signal deck — swipe, wheel or use keyboard
           </p>
+          <span className="mb-4 font-mono text-[8px] uppercase tracking-[0.14em] text-[#53625e]">
+            {String(activeIndex + 1).padStart(2, "0")} / {String(features.length).padStart(2, "0")} <span className="mx-1 text-[#9dfcc7]">●</span> Live
+          </span>
         </div>
         <Swiper
-          modules={[Autoplay, FreeMode, Keyboard]}
-          freeMode={{ enabled: true, momentum: true, momentumRatio: 0.4 }}
+          modules={[A11y, Autoplay, Keyboard, Mousewheel, Pagination]}
           keyboard={{ enabled: true, onlyInViewport: true }}
+          mousewheel={{ forceToAxis: true, releaseOnEdges: true, sensitivity: 0.55 }}
+          pagination={{ clickable: true, dynamicBullets: true }}
           grabCursor
           loop
-          slidesPerView="auto"
+          slidesPerView={1.12}
           spaceBetween={16}
-          speed={5000}
-          autoplay={{ delay: 0, disableOnInteraction: false, pauseOnMouseEnter: true }}
+          speed={720}
+          breakpoints={{
+            640: { slidesPerView: 2.1 },
+            1024: { slidesPerView: 3.15 },
+          }}
+          autoplay={{ delay: 4200, disableOnInteraction: false, pauseOnMouseEnter: true, waitForTransition: false }}
+          watchSlidesProgress
+          roundLengths
+          a11y={{
+            prevSlideMessage: "Previous signal module",
+            nextSlideMessage: "Next signal module",
+            paginationBulletMessage: "Go to signal module {{index}}",
+          }}
+          onSwiper={(swiper) => { interactiveSwiperRef.current = swiper; }}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex % features.length)}
           className="feature-interactive-swiper"
         >
-          {[...features, ...features].map((item, index) => (
-            <SwiperSlide key={`interactive-${item.title}-${index}`} className="!w-[300px]">
+          {features.map((item, index) => (
+            <SwiperSlide key={`interactive-${item.title}-${index}`}>
               <HUDFrame label="Module" index={String((index % features.length) + 1).padStart(2, "0")} accent={item.color} className="group h-[160px] p-5 transition-all duration-400">
                 <div className="relative flex items-start gap-3">
                   <div
@@ -134,6 +157,25 @@ export function FeatureSlider() {
             </SwiperSlide>
           ))}
         </Swiper>
+        <div className="container-shell mt-5 flex items-center justify-between gap-4">
+          <button
+            type="button"
+            aria-label="Previous signal module"
+            onClick={() => interactiveSwiperRef.current?.slidePrev()}
+            className="feature-deck-button"
+          >
+            ←
+          </button>
+          <span className="font-mono text-[8px] uppercase tracking-[0.16em] text-[#53625e]">Route the signal</span>
+          <button
+            type="button"
+            aria-label="Next signal module"
+            onClick={() => interactiveSwiperRef.current?.slideNext()}
+            className="feature-deck-button"
+          >
+            →
+          </button>
+        </div>
       </div>
     </section>
   );

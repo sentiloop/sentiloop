@@ -1609,7 +1609,69 @@ button:focus-visible {
   }
 }
 
-/* Feature interactive slider — smooth linear autoplay */
+/* Feature interactive slider — premium signal deck */
+.feature-interactive-swiper {
+  overflow: visible;
+  padding-bottom: 2.5rem;
+}
+
 .feature-interactive-swiper .swiper-wrapper {
-  transition-timing-function: linear !important;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.feature-interactive-swiper .swiper-slide {
+  height: auto;
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+
+.feature-interactive-swiper .swiper-slide:not(.swiper-slide-active) {
+  opacity: 0.72;
+  transform: scale(0.97);
+}
+
+.feature-interactive-swiper .swiper-slide-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.feature-interactive-swiper .swiper-pagination {
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.feature-interactive-swiper .swiper-pagination-bullet {
+  width: 5px;
+  height: 5px;
+  margin: 0 !important;
+  background: rgba(157, 252, 199, 0.3);
+  opacity: 1;
+  transition: width 300ms ease, background 300ms ease, box-shadow 300ms ease;
+}
+
+.feature-interactive-swiper .swiper-pagination-bullet-active {
+  width: 20px;
+  border-radius: 999px;
+  background: #9dfcc7;
+  box-shadow: 0 0 12px rgba(157, 252, 199, 0.55);
+}
+
+.feature-deck-button {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border: 1px solid rgba(157, 252, 199, 0.18);
+  border-radius: 999px;
+  color: #9dfcc7;
+  background: rgba(157, 252, 199, 0.04);
+  transition: border-color 250ms ease, background 250ms ease, transform 250ms ease;
+}
+
+.feature-deck-button:hover {
+  border-color: rgba(157, 252, 199, 0.45);
+  background: rgba(157, 252, 199, 0.1);
+  transform: translateY(-1px);
 }
