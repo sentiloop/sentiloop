@@ -139,7 +139,7 @@ export function Navigation() {
           })}
         </div>
 
-        <Link href="/login" className="nav-cta group relative hidden min-h-9 items-center gap-2 overflow-hidden rounded-full px-4 text-[0.74rem] font-semibold text-[#07110b] md:inline-flex">
+        <Link href="/login" className="nav-cta group relative inline-flex min-h-9 shrink-0 items-center gap-1.5 overflow-hidden rounded-full px-2.5 text-[0.68rem] font-semibold text-[#07110b] sm:gap-2 sm:px-4 sm:text-[0.74rem]">
           <span className="relative z-10">Enter workspace</span>
           <ArrowUpRight size={13} className="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </Link>
