@@ -13,6 +13,7 @@ import {
   Vector3,
   type Group,
   type Mesh,
+  type Points,
   type PointLight,
 } from "three";
 
@@ -23,6 +24,14 @@ type NeuralData = {
   nodes: Float32Array;
   edges: Float32Array;
   highlights: [number, number, number][];
+};
+
+type SignalPulseData = {
+  starts: Float32Array;
+  ends: Float32Array;
+  positions: Float32Array;
+  progress: Float32Array;
+  speeds: Float32Array;
 };
 
 type GalaxyData = {
@@ -67,6 +76,34 @@ function createNeuralData(): NeuralData {
     edges: new Float32Array(edgeValues),
     highlights: positions.filter((_, index) => index % 7 === 0),
   };
+}
+
+function createSignalPulseData(edges: Float32Array, count: number): SignalPulseData {
+  const random = seededRandom(9411);
+  const starts = new Float32Array(count * 3);
+  const ends = new Float32Array(count * 3);
+  const positions = new Float32Array(count * 3);
+  const progress = new Float32Array(count);
+  const speeds = new Float32Array(count);
+  const edgeCount = Math.max(1, edges.length / 6);
+
+  for (let index = 0; index < count; index += 1) {
+    const edgeOffset = Math.floor(random() * edgeCount) * 6;
+    const pointOffset = index * 3;
+    const start = [edges[edgeOffset] ?? 0, edges[edgeOffset + 1] ?? 0, edges[edgeOffset + 2] ?? 0];
+    const end = [edges[edgeOffset + 3] ?? 0, edges[edgeOffset + 4] ?? 0, edges[edgeOffset + 5] ?? 0];
+    const initialProgress = random();
+
+    starts.set(start, pointOffset);
+    ends.set(end, pointOffset);
+    progress[index] = initialProgress;
+    speeds[index] = 0.12 + random() * 0.28;
+    positions[pointOffset] = start[0] + (end[0] - start[0]) * initialProgress;
+    positions[pointOffset + 1] = start[1] + (end[1] - start[1]) * initialProgress;
+    positions[pointOffset + 2] = start[2] + (end[2] - start[2]) * initialProgress;
+  }
+
+  return { starts, ends, positions, progress, speeds };
 }
 
 function createGalaxyData(count: number): GalaxyData {
@@ -135,6 +172,7 @@ function NeuralField({ reducedMotion }: { reducedMotion: boolean }) {
   const group = useRef<Group>(null);
   const nodeCloud = useRef<Group>(null);
   const data = useMemo(createNeuralData, []);
+  const pulseData = useMemo(() => createSignalPulseData(data.edges, 28), [data.edges]);
 
   useFrame((state, delta) => {
     if (!group.current || reducedMotion) return;
@@ -151,6 +189,8 @@ function NeuralField({ reducedMotion }: { reducedMotion: boolean }) {
         <lineBasicMaterial color="#7ecda2" transparent opacity={0.15} blending={AdditiveBlending} depthWrite={false} />
       </lineSegments>
 
+      <SignalPulses data={pulseData} reducedMotion={reducedMotion} />
+
       <points frustumCulled={false}>
         <bufferGeometry><bufferAttribute attach="attributes-position" args={[data.nodes, 3]} /></bufferGeometry>
         <pointsMaterial color="#b9ffcf" size={0.037} sizeAttenuation transparent opacity={0.78} blending={AdditiveBlending} depthWrite={false} toneMapped={false} />
@@ -165,6 +205,48 @@ function NeuralField({ reducedMotion }: { reducedMotion: boolean }) {
         ))}
       </group>
     </group>
+  );
+}
+
+function SignalPulses({ data, reducedMotion }: { data: SignalPulseData; reducedMotion: boolean }) {
+  const pulseRef = useRef<Points>(null);
+
+  useFrame((_, delta) => {
+    if (!pulseRef.current || reducedMotion) return;
+
+    const positionAttribute = pulseRef.current.geometry.attributes.position;
+    for (let index = 0; index < data.progress.length; index += 1) {
+      const nextProgress = data.progress[index] + delta * data.speeds[index];
+      data.progress[index] = nextProgress > 1 ? nextProgress - 1 : nextProgress;
+      const pointOffset = index * 3;
+      const t = data.progress[index];
+
+      positionAttribute.setXYZ(
+        index,
+        data.starts[pointOffset] + (data.ends[pointOffset] - data.starts[pointOffset]) * t,
+        data.starts[pointOffset + 1] + (data.ends[pointOffset + 1] - data.starts[pointOffset + 1]) * t,
+        data.starts[pointOffset + 2] + (data.ends[pointOffset + 2] - data.starts[pointOffset + 2]) * t,
+      );
+    }
+    positionAttribute.needsUpdate = true;
+  });
+
+  return (
+    <points ref={pulseRef} frustumCulled={false}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[data.positions, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        color="#d7ffe4"
+        size={0.07}
+        sizeAttenuation
+        transparent
+        opacity={0.92}
+        blending={AdditiveBlending}
+        depthWrite={false}
+        toneMapped={false}
+      />
+    </points>
   );
 }
 

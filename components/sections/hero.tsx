@@ -39,6 +39,22 @@ export function Hero() {
         <SignalOrb />
       </div>
 
+      <div className="hero-signal-hud pointer-events-none absolute right-[3%] top-[16%] z-[4] hidden w-[188px] rounded-2xl p-3 xl:block" aria-hidden="true">
+        <div className="flex items-center justify-between font-mono text-[8px] uppercase tracking-[0.16em] text-[#6f7e78]">
+          <span>Signal core / 01</span>
+          <span className="hero-hud-live inline-flex items-center gap-1.5 text-[#9dfcc7]"><span className="size-1 rounded-full bg-[#9dfcc7]" />Live</span>
+        </div>
+        <div className="hero-hud-trace relative mt-3 h-12 overflow-hidden rounded-lg border border-white/[0.07] bg-black/20">
+          <span className="absolute inset-x-2 top-1/2 h-px bg-gradient-to-r from-transparent via-[#9dfcc7]/60 to-transparent" />
+          <span className="hero-hud-scan absolute left-[18%] top-0 h-full w-px bg-[#9dfcc7] shadow-[0_0_12px_#9dfcc7]" />
+          <span className="absolute bottom-2 left-2 font-mono text-[7px] uppercase tracking-[0.14em] text-[#5f6c67]">Neural field stable</span>
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-2 font-mono text-[8px] uppercase tracking-[0.12em]">
+          <span className="text-[#59655f]">Latency <strong className="ml-1 font-normal text-[#c7ffda]">12ms</strong></span>
+          <span className="text-right text-[#59655f]">Flow <strong className="ml-1 font-normal text-[#c7ffda]">0.98</strong></span>
+        </div>
+      </div>
+
       <div className="container-shell relative z-10 flex min-h-[calc(100svh-7rem)] flex-1 flex-col justify-center pb-28 md:pb-32">
         <div className="max-w-[760px]">
           <motion.div
