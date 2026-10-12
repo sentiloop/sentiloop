@@ -353,6 +353,19 @@ button:focus-visible {
   background: #050608;
 }
 
+.hero-video-shell {
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #050608;
+}
+
+.hero-video {
+  opacity: 0.48;
+  filter: saturate(0.86) contrast(1.08) brightness(0.72);
+  object-position: 68% center;
+}
+
 .hero-aurora {
   background:
     radial-gradient(ellipse 46% 48% at 76% 45%, rgba(105, 255, 168, 0.11), transparent 66%),
@@ -472,6 +485,11 @@ button:focus-visible {
     min-height: 760px;
   }
 
+  .hero-video {
+    opacity: 0.34;
+    object-position: 68% center;
+  }
+
   .hero-vignette {
     background:
       linear-gradient(90deg, rgba(5, 6, 8, 0.76), rgba(5, 6, 8, 0.45)),
@@ -484,6 +502,10 @@ button:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-video {
+    display: none;
+  }
+
   .hero-aurora,
   .hero-title-gradient,
   .hero-glass-card,
