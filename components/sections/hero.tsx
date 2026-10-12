@@ -31,6 +31,19 @@ export function Hero() {
       onPointerMove={handlePointerMove}
       className="hero-stage relative flex min-h-[100svh] overflow-hidden pt-28 md:pt-32"
     >
+      <div className="hero-video-shell absolute inset-0" aria-hidden="true">
+        <video
+          className="hero-video absolute inset-0 h-full w-full object-cover"
+          autoPlay={!reducedMotion}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster="/media/robotic-next-generation-hero-poster.jpg"
+        >
+          <source src="/media/robotic-next-generation-hero.mp4" type="video/mp4" />
+        </video>
+      </div>
       <div className="hero-aurora absolute inset-0" aria-hidden="true" />
       <div className="hero-spotlight absolute inset-0" aria-hidden="true" />
       <div className="grid-surface absolute inset-0 opacity-45" aria-hidden="true" />
