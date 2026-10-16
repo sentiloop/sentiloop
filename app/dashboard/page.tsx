@@ -136,7 +136,7 @@ export default async function DashboardPage() {
               <article className="relative overflow-hidden rounded-2xl border border-[#70dfff]/15 bg-gradient-to-br from-[#0b1d2b] to-[#111025] p-5"><div className="absolute -right-10 -top-10 size-32 rounded-full bg-[#62d9ff]/10 blur-3xl" /><div className="relative"><div className="flex items-center justify-between"><p className="font-mono text-[8px] uppercase tracking-[0.14em] text-[#78b8da]">Ask Sentiloop</p><Sparkles size={14} className="text-[#77e9ff]" /></div><p className="mt-4 text-sm font-medium">What changed since yesterday?</p><button type="button" className="mt-4 inline-flex items-center gap-2 text-[10px] text-[#9adff8]">Open intelligence canvas <ArrowUpRight size={12} /></button></div></article>
             </div>
 
-            <footer className="mt-8 flex flex-col gap-2 border-t border-white/[0.06] pt-5 font-mono text-[8px] uppercase tracking-[0.11em] text-[#45525e] sm:flex-row sm:items-center sm:justify-between"><p>Sentiloop workspace preview · static demonstration data</p><p>No authentication backend or live customer data</p></footer>
+            <footer className="mt-8 flex flex-col gap-2 border-t border-white/[0.06] pt-5 font-mono text-[8px] uppercase tracking-[0.11em] text-[#45525e] sm:flex-row sm:items-center sm:justify-between"><p>Sentiloop workspace preview · static demonstration data</p><p>Persistent account session · live customer data not connected</p></footer>
           </div>
         </section>
       </div>

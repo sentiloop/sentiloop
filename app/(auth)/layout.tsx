@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Authentication",
-  description: "Sentiloop demo authentication portal.",
+  description: "Sentiloop secure authentication portal.",
   robots: { index: false, follow: false, nocache: true },
 };
 
@@ -23,9 +23,9 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         <Logo href="/" />
         <div className={styles.systemState}>
           <span className={styles.liveDot} />
-          <span>Demo auth system</span>
+          <span>Secure auth system</span>
           <span className={styles.systemDivider} />
-          <span>In-memory storage</span>
+          <span>Persistent storage</span>
         </div>
       </header>
 
@@ -46,7 +46,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         <Link href="/" className={styles.homeLink}>
           <ArrowLeft size={14} /> Return home
         </Link>
-        <p>Demo auth · In-memory storage · Data resets on server restart</p>
+        <p>Secure auth · Persistent account storage · Workspace data is preview-only</p>
       </footer>
     </div>
   );

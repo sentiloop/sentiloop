@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:migrate": "node scripts/migrate-db.mjs"
   },
   "dependencies": {
     "@auth/core": "^0.37.4",
@@ -22,6 +23,7 @@
     "lucide-react": "1.27.0",
     "next": "15.5.22",
     "next-auth": "^5.0.0-beta.25",
+    "postgres": "^3.4.7",
     "postprocessing": "6.39.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",

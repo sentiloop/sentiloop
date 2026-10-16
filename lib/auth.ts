@@ -40,7 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60, // 24 hours
+    maxAge: 24 * 60 * 60,
   },
   providers: [
     Google({
@@ -67,7 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (!email || !password) return null;
 
-        const user = findUserByEmail(email);
+        const user = await findUserByEmail(email);
         if (!user || !user.passwordHash) return null;
 
         const isValid = await compare(password, user.passwordHash);
@@ -86,15 +86,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account }) {
-      // For OAuth providers, auto-create user if not exists
       if (account?.provider && account.provider !== "credentials") {
         const email = user.email;
         if (!email) return false;
 
-        const existing = findUserByEmail(email);
+        const existing = await findUserByEmail(email);
         if (!existing) {
-          createUser({
-            email,
+          await createUser({
+            email: email.toLowerCase(),
             passwordHash: null,
             name: user.name ?? null,
             role: "employee",
@@ -114,7 +113,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async jwt({ token, user }) {
       if (user) {
-        const dbUser = findUserByEmail(user.email ?? "");
+        const dbUser = await findUserByEmail(user.email ?? "");
         (token as AuthToken).id = dbUser?.id ?? user.id ?? "";
         (token as AuthToken).role = dbUser?.role ?? (user as { role?: string }).role ?? "employee";
         (token as AuthToken).twoFactorEnabled = (user as { twoFactorEnabled?: boolean }).twoFactorEnabled ?? false;
@@ -131,10 +130,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
 });
 
-/**
- * Helper to get user from database by session token id.
- * Used in server actions and API routes.
- */
-export function getUserFromDb(id: string) {
+export async function getUserFromDb(id: string) {
   return findUserById(id);
 }

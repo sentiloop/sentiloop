@@ -92,14 +92,14 @@ export default function OtpPage() {
         "Verified"
       }
       description={
-        step === "email" ? "Enter your email to receive a one-time code. (Demo: check server console for code.)" :
-        step === "verify" ? `A 6-digit code was sent to ${email}. (Demo: check server console.)` :
+        step === "email" ? "Enter your email to receive a one-time code. Delivery must be configured before launch." :
+        step === "verify" ? `A 6-digit code was generated for ${email}. Delivery must be configured before launch.` :
         "OTP verified. Redirecting..."
       }
       footer={
         <>
-          <span><Fingerprint size={11} /> Demo OTP</span>
-          <span>Code logged to server console</span>
+          <span><Fingerprint size={11} /> Persistent OTP state</span>
+          <span>Delivery channel required</span>
         </>
       }
     >

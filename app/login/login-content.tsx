@@ -700,7 +700,7 @@ export default function LoginContent() {
                   <span>
                     <ShieldCheck size={11} /> Encrypted connection
                   </span>
-                  <span>In-memory · data resets on restart</span>
+                  <span>Persistent account database</span>
                 </div>
               </div>
             </div>

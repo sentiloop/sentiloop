@@ -45,12 +45,12 @@ export default function ForgotPasswordPage() {
       eyebrow="Password recovery"
       title={sent ? "Check your email" : "Reset your password"}
       description={sent
-        ? "If an account exists with that email, a reset link has been sent. (Demo: check server console.)"
+        ? "If an account exists with that email, a reset link has been generated. Email delivery must be configured before launch."
         : "Enter your email and we'll send a password reset link."}
       footer={
         <>
-          <span><KeyRound size={11} /> Demo reset flow</span>
-          <span>Simulated · no email sent</span>
+          <span><KeyRound size={11} /> Persistent reset flow</span>
+          <span>Email delivery required</span>
         </>
       }
     >

@@ -47,8 +47,8 @@ export default function VerifyEmailContent() {
       description={message}
       footer={
         <>
-          <span><Mail size={11} /> Demo verification</span>
-          <span>In-memory store</span>
+          <span><Mail size={11} /> Account verification</span>
+          <span>Persistent account store</span>
         </>
       }
     >

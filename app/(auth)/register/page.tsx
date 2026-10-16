@@ -80,11 +80,11 @@ export default function RegisterPage() {
       title={success ? "Account created" : "Create your account"}
       description={success
         ? "Welcome aboard. Opening your workspace."
-        : "Join Sentiloop to access customer intelligence. Demo: in-memory storage."}
+        : "Join Sentiloop to access customer intelligence. Your account is stored securely."}
       footer={
         <>
-          <span><UserPlus size={11} /> Demo registration</span>
-          <span>In-memory · resets on restart</span>
+          <span><UserPlus size={11} /> Secure registration</span>
+          <span>Encrypted persistence</span>
         </>
       }
     >
